@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<style>
+:root{--ink:#141416;--ink2:#5C5C63;--ink3:#93939A;--line:#E2E2DC;
+--f:"Segoe UI Variable Display","Segoe UI","Microsoft YaHei UI",sans-serif;--m:Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1080px;background:#FAFAF7;color:var(--ink);font-family:var(--f);padding:30px 36px}
+h2{font-size:11px;letter-spacing:.2em;color:var(--ink3);font-weight:600;margin-bottom:16px}
+.row{display:flex;align-items:center;gap:30px;padding:20px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:none}
+.mk{width:132px;height:132px;flex:0 0 132px;display:flex;align-items:center;justify-content:center;
+  background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.sz{display:flex;align-items:flex-end;gap:24px;flex:0 0 250px}
+.sz div{display:flex;flex-direction:column;align-items:center;gap:7px}
+.sz span{font-family:var(--m);font-size:9px;color:var(--ink3)}
+.info{flex:1}
+.info b{font-size:13.5px;font-weight:600;display:block}
+.info p{font-size:11.5px;color:var(--ink2);line-height:1.7;margin-top:6px;max-width:400px}
+.tile{width:132px;height:132px;border-radius:29px;background:linear-gradient(165deg,#1F1F22,#0A0A0B);
+  display:flex;align-items:center;justify-content:center}
+</style></head><body>
+<h2>第二轮候选 · 只用三种尺寸检验轮廓</h2>
+
+<div class="row">
+  <div class="mk">
+    <svg width="96" height="96" viewBox="0 0 24 24" fill="none">
+      <rect x="8.6" y="1.8" width="6.8" height="6.8" fill="#141416"/>
+      <path d="M4 9.6v6.6h16V9.6" stroke="#141416" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/>
+    </svg>
+  </div>
+  <div class="sz">
+    <div><svg width="64" height="64" viewBox="0 0 24 24" fill="none"><rect x="8.6" y="1.8" width="6.8" height="6.8" fill="#141416"/><path d="M4 9.6v6.6h16V9.6" stroke="#141416" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/></svg><span>64</span></div>
+    <div><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect x="8.6" y="1.8" width="6.8" height="6.8" fill="#141416"/><path d="M4 9.6v6.6h16V9.6" stroke="#141416" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/></svg><span>32</span></div>
+    <div><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8.6" y="1.8" width="6.8" height="6.8" fill="#141416"/><path d="M4 9.6v6.6h16V9.6" stroke="#141416" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg><span>16</span></div>
+  </div>
+  <div class="info"><b>A · 入库</b>
+    <p>方口托 + 落块。容器只占三面，开口朝上，块悬在口上 1.6u。16px 时读作「东西进盒子」，不会与箭头混淆。</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="mk">
+    <svg width="96" height="96" viewBox="0 0 24 24" fill="none">
+      <path d="M3 21V3h18v9.4M16.6 21H3" stroke="#141416" stroke-width="2.8" stroke-linecap="square" stroke-linejoin="miter"/>
+      <rect x="12.6" y="12.6" width="8.4" height="8.4" fill="#141416"/>
+    </svg>
+  </div>
+  <div class="sz">
+    <div><svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M3 21V3h18v9.4M16.6 21H3" stroke="#141416" stroke-width="2.8" stroke-linecap="square" stroke-linejoin="miter"/><rect x="12.6" y="12.6" width="8.4" height="8.4" fill="#141416"/></svg><span>64</span></div>
+    <div><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M3 21V3h18v9.4M16.6 21H3" stroke="#141416" stroke-width="2.8" stroke-linecap="square" stroke-linejoin="miter"/><rect x="12.6" y="12.6" width="8.4" height="8.4" fill="#141416"/></svg><span>32</span></div>
+    <div><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 21V3h18v9.4M16.6 21H3" stroke="#141416" stroke-width="3.2" stroke-linecap="square" stroke-linejoin="miter"/><rect x="12.6" y="12.6" width="8.4" height="8.4" fill="#141416"/></svg><span>16</span></div>
+  </div>
+  <div class="info"><b>B · 出角</b>
+    <p>框缺右下角，实块从缺口出去。语义是「从框里取一块」，小尺寸下缺口与实块会合体成「方框加粗角」。</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="mk">
+    <svg width="96" height="96" viewBox="0 0 24 24" fill="none">
+      <path d="M12.2 2.4v11.4c0 4.6-3.4 7.8-7.4 7.8" stroke="#141416" stroke-width="3.2"
+            stroke-linecap="square" stroke-linejoin="miter"/>
+      <path d="M5.4 17.4l-1.2 4.2 4.2 1.2" stroke="#141416" stroke-width="3.2"
+            stroke-linecap="square" stroke-linejoin="miter"/>
+    </svg>
+  </div>
+  <div class="sz">
+    <div><svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M12.2 2.4v11.4c0 4.6-3.4 7.8-7.4 7.8" stroke="#141416" stroke-width="3.2" stroke-linecap="square" stroke-linejoin="miter"/><path d="M5.4 17.4l-1.2 4.2 4.2 1.2" stroke="#141416" stroke-width="3.2" stroke-linecap="square" stroke-linejoin="miter"/></svg><span>64</span></div>
+    <div><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M12.2 2.4v11.4c0 4.6-3.4 7.8-7.4 7.8" stroke="#141416" stroke-width="3.2" stroke-linecap="square" stroke-linejoin="miter"/><path d="M5.4 17.4l-1.2 4.2 4.2 1.2" stroke="#141416" stroke-width="3.2" stroke-linecap="square" stroke-linejoin="miter"/></svg><span>32</span></div>
+    <div><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12.2 2.4v11.4c0 4.6-3.4 7.8-7.4 7.8" stroke="#141416" stroke-width="3.6" stroke-linecap="square" stroke-linejoin="miter"/><path d="M5.4 17.4l-1.2 4.2 4.2 1.2" stroke="#141416" stroke-width="3.6" stroke-linecap="square" stroke-linejoin="miter"/></svg><span>16</span></div>
+  </div>
+  <div class="info"><b>C · 钩</b>
+    <p>一根弯钩，语义直给「抓取」。但字形偏鱼钩／手杖，且 16px 下弯段只剩一团墨，丢了细节。</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="tile">
+    <svg width="72" height="72" viewBox="0 0 24 24" fill="none">
+      <rect x="8.6" y="1.8" width="6.8" height="6.8" fill="#fff"/>
+      <path d="M4 9.6v6.6h16V9.6" stroke="#fff" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/>
+    </svg>
+  </div>
+  <div class="sz">
+    <div style="background:#0E0E0F;border-radius:9px;padding:7px"><svg width="64" height="64" viewBox="0 0 24 24" fill="none"><rect x="8.6" y="1.8" width="6.8" height="6.8" fill="#fff"/><path d="M4 9.6v6.6h16V9.6" stroke="#fff" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/></svg><span style="color:#8a8a8f">64</span></div>
+    <div style="background:#0E0E0F;border-radius:7px;padding:6px"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect x="8.6" y="1.8" width="6.8" height="6.8" fill="#fff"/><path d="M4 9.6v6.6h16V9.6" stroke="#fff" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/></svg><span style="color:#8a8a8f">32</span></div>
+    <div style="background:#0E0E0F;border-radius:4px;padding:4px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="8.6" y="1.8" width="6.8" height="6.8" fill="#fff"/><path d="M4 9.6v6.6h16V9.6" stroke="#fff" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg><span style="color:#8a8a8f">16</span></div>
+  </div>
+  <div class="info"><b>A 的深底反白</b>
+    <p>白笔画落在 #0E0E0F 底上，对比 17.6:1。16px 下块与托仍能分开，靠的是 1.6u 的缝与 3u 的笔画。</p>
+  </div>
+</div>
+
+</body></html>

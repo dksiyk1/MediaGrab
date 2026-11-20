@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><style>
+/* macOS 26 Tahoe / HIG — 半透明材质 + 分组容器 */
+:root{
+  --accent:#007AFF; --label:#1D1D1F; --label2:#6E6E73; --label3:#8E8E93;
+  --fill:rgba(120,120,128,.12); --fill2:rgba(120,120,128,.08);
+  --sep:rgba(60,60,67,.14);
+  --font:-apple-system,"SF Pro Text","Segoe UI","Microsoft YaHei UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1180px;height:760px;overflow:hidden;font-family:var(--font);
+  -webkit-font-smoothing:antialiased;letter-spacing:-.01em;
+  background:linear-gradient(135deg,#2C3B4E,#3C4E63 40%,#2E4A52 75%,#1C2833)}
+.win{width:1180px;height:760px;display:flex;border-radius:14px;overflow:hidden;
+  background:rgba(246,246,248,.86);backdrop-filter:blur(70px) saturate(180%);
+  -webkit-backdrop-filter:blur(70px) saturate(180%);
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 40px 90px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.2)}
+/* sidebar */
+.side{width:218px;flex:0 0 218px;background:rgba(255,255,255,.42);
+  backdrop-filter:blur(60px) saturate(160%);border-right:1px solid var(--sep);
+  display:flex;flex-direction:column;padding:14px 10px 10px}
+.lights{display:flex;gap:8px;padding:2px 6px 16px}
+.lights i{width:12px;height:12px;border-radius:50%;display:block}
+.glabel{font-size:11px;color:var(--label3);padding:12px 8px 5px;font-weight:600}
+.glabel:first-of-type{padding-top:2px}
+.item{height:28px;border-radius:6px;display:flex;align-items:center;gap:8px;padding:0 8px;
+  font-size:13px;color:var(--label)}
+.item svg{width:15px;height:15px;flex:0 0 15px;color:var(--accent);opacity:.95}
+.item .n{margin-left:auto;font-size:11px;color:var(--label3)}
+.item.on{background:var(--fill);font-weight:600}
+.foot{margin-top:auto;padding:8px 8px 2px;border-top:1px solid var(--sep)}
+.diskrow{display:flex;justify-content:space-between;font-size:11px;color:var(--label2);padding:4px 0}
+.diskbar{height:4px;border-radius:2px;background:var(--fill);margin:4px 0 10px;overflow:hidden}
+.diskbar i{display:block;height:100%;width:63%;background:var(--accent);opacity:.55;border-radius:2px}
+.settings{height:26px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--label);padding:0 2px}
+.settings svg{width:15px;height:15px;color:var(--label2)}
+/* main */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;background:rgba(250,250,252,.6)}
+.toolbar{height:52px;flex:0 0 52px;display:flex;align-items:center;gap:12px;padding:0 22px}
+.toolbar h1{font-size:15px;font-weight:600;color:var(--label)}
+.toolbar .cnt{font-size:11px;color:var(--label3)}
+.tright{margin-left:auto;display:flex;align-items:center;gap:8px}
+.search{width:184px;height:26px;border-radius:7px;background:var(--fill2);border:.5px solid var(--sep);
+  display:flex;align-items:center;gap:6px;padding:0 8px;font-size:12px;color:var(--label3)}
+.iconbtn{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+/* import */
+.imp{margin:0 22px 14px;height:44px;border-radius:10px;background:rgba(255,255,255,.72);
+  border:.5px solid var(--sep);box-shadow:0 1px 2px rgba(0,0,0,.04);
+  display:flex;align-items:center;padding:0 6px 0 14px;gap:8px}
+.imp .ph{flex:1;font-size:13px;color:var(--label3)}
+.btn{height:28px;padding:0 14px;border-radius:6px;font-size:13px;display:flex;align-items:center;
+  justify-content:center;gap:5px}
+.btn.prominent{background:var(--accent);color:#fff;font-weight:500;
+  box-shadow:0 1px 2px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.22)}
+.btn.bordered{background:rgba(255,255,255,.9);border:.5px solid var(--sep);color:var(--label);
+  box-shadow:0 1px 1px rgba(0,0,0,.03)}
+/* list */
+.list{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:0 22px}
+.card{background:rgba(255,255,255,.78);border:.5px solid var(--sep);border-radius:12px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04),inset 0 .5px 0 rgba(255,255,255,.9);
+  padding:13px;display:flex;gap:13px;margin-bottom:10px}
+.thumb{width:126px;height:72px;flex:0 0 126px;border-radius:7px;overflow:hidden;position:relative;
+  background:#111;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.thumb .dur{position:absolute;right:4px;bottom:4px;font-size:10px;color:#fff;
+  background:rgba(0,0,0,.5);border-radius:3px;padding:0 4px;font-variant-numeric:tabular-nums;
+  backdrop-filter:blur(4px)}
+.info{flex:1;min-width:0;display:flex;flex-direction:column}
+.tit{font-size:13.5px;font-weight:600;color:var(--label);line-height:19px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.meta{margin-top:3px;font-size:11.5px;color:var(--label2);display:flex;align-items:center;gap:7px}
+.tag{font-size:10.5px;color:#0A6BC4;background:rgba(0,122,255,.12);border-radius:4px;padding:0 5px;
+  line-height:16px;font-weight:500}
+.cfoot{margin-top:auto;padding-top:9px;display:flex;align-items:center;gap:9px}
+.lb{font-size:11px;color:var(--label3)}
+.seg{display:flex;height:24px;padding:2px;border-radius:7px;background:var(--fill2);gap:1px}
+.seg span{display:flex;align-items:center;padding:0 10px;font-size:11.5px;color:var(--label);
+  border-radius:6px}
+.seg span.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.04);
+  font-weight:600}
+.rowend{margin-left:auto;display:flex;align-items:center;gap:9px}
+.hint{font-size:11px;color:var(--label3)}
+.btn.sm{height:26px;padding:0 13px;font-size:12px;border-radius:6px}
+.gal{display:flex;gap:4px;margin-top:6px}
+.gal i{width:28px;height:28px;border-radius:4px;display:block}
+.chk{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--label)}
+.chk em{width:14px;height:14px;border-radius:4px;background:var(--accent);display:flex;
+  align-items:center;justify-content:center;font-style:normal;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+/* progress */
+.live{background:rgba(255,255,255,.78);border:.5px solid var(--sep);border-radius:12px;
+  padding:11px 13px;margin-top:auto;margin-bottom:12px;display:flex;align-items:center;gap:13px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.live .t{flex:1;font-size:12px;color:var(--label2);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.live .t b{color:var(--label);font-weight:600}
+.pb{width:180px;height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
+.pb i{display:block;height:100%;width:68%;background:var(--accent);border-radius:2px}
+.num{font-size:11.5px;color:var(--label2);font-variant-numeric:tabular-nums}
+/* status */
+.status{height:30px;flex:0 0 30px;border-top:.5px solid var(--sep);display:flex;align-items:center;
+  gap:9px;font-size:11px;color:var(--label2);padding:0 22px;background:rgba(255,255,255,.35)}
+.sep{width:1px;height:11px;background:var(--sep)}
+.link{color:var(--accent)}
+.sw{width:34px;height:20px;border-radius:10px;background:var(--fill);position:relative}
+.sw i{position:absolute;left:1px;top:1px;width:18px;height:18px;border-radius:50%;background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,.22)}
+</style></head><body>
+<div class="win">
+  <div class="side">
+    <div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div>
+
+    <div class="glabel">资料库</div>
+    <div class="item on">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>
+      全部解析<span class="n">12</span></div>
+    <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="4.5" width="17" height="15" rx="2.4"/><path d="M3.5 15l4.5-4.5 3.5 3.5 3-3 6 5.5"/></svg>图片<span class="n">8</span></div>
+    <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="5.5" width="12" height="13" rx="2.4"/><path d="M15.5 10l5-3v10l-5-3"/></svg>视频<span class="n">4</span></div>
+    <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12.5l5 5L20 6.5"/></svg>已完成<span class="n">5</span></div>
+
+    <div class="glabel">工具</div>
+    <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v3M12 17.5v3"/></svg>资源嗅探</div>
+
+    <div class="glabel">下载</div>
+    <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3.5v11M7.5 10.5L12 15l4.5-4.5M4 20.5h16"/></svg>下载队列<span class="n">2</span></div>
+    <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.2l3.4 2"/></svg>下载历史</div>
+
+    <div class="foot">
+      <div class="diskrow"><span>磁盘</span><span>65 GB 可用</span></div>
+      <div class="diskbar"><i></i></div>
+      <div class="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v3M12 18.2v3M2.8 12h3M18.2 12h3M5.5 5.5l2.1 2.1M16.4 16.4l2.1 2.1M18.5 5.5l-2.1 2.1M7.6 16.4L5.5 18.5"/></svg>
+        设置</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="toolbar">
+      <h1>全部解析</h1><span class="cnt">12 项</span>
+      <div class="tright">
+        <div class="search">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+          搜索作品
+        </div>
+        <div class="iconbtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6E6E73" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v3M12 18.2v3M2.8 12h3M18.2 12h3M5.5 5.5l2.1 2.1M16.4 16.4l2.1 2.1M18.5 5.5l-2.1 2.1M7.6 16.4L5.5 18.5"/></svg></div>
+      </div>
+    </div>
+
+    <div class="imp">
+      <div class="ph">粘贴抖音 / B站 / 小红书链接，支持一次粘贴多条</div>
+      <div class="btn bordered">粘贴</div>
+      <div class="btn prominent">解析</div>
+    </div>
+
+    <div class="list">
+      <div class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 160 100" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+            <defs>
+              <linearGradient id="m1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#0A1420"/><stop offset=".5" stop-color="#192939"/>
+                <stop offset="1" stop-color="#060B12"/></linearGradient>
+              <radialGradient id="ml1"><stop offset="0" stop-color="#FFC873" stop-opacity=".9"/>
+                <stop offset="1" stop-color="#FFC873" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="160" height="100" fill="url(#m1)"/>
+            <rect x="96" y="24" width="28" height="76" fill="#0F1A27"/>
+            <rect x="128" y="40" width="20" height="60" fill="#0B141F"/>
+            <rect x="16" y="48" width="24" height="52" fill="#0C1724"/>
+            <ellipse cx="54" cy="54" rx="30" ry="12" fill="url(#ml1)"/>
+            <ellipse cx="108" cy="62" rx="24" ry="10" fill="url(#ml1)" opacity=".55"/>
+            <rect x="53" y="28" width="1.4" height="72" fill="#26364A"/>
+            <circle cx="54" cy="28" r="2.2" fill="#FFDCA4"/>
+          </svg>
+          <span class="dur">00:42</span>
+        </div>
+        <div class="info">
+          <div class="tit">凌晨四点的城市，只有路灯还醒着</div>
+          <div class="meta"><span class="tag">无水印</span>抖音 · @林间摄影 · 1920×1080 · 8.4 MB</div>
+          <div class="cfoot">
+            <span class="lb">清晰度</span>
+            <div class="seg"><span class="on">1080P 原画</span><span>720P</span><span>仅音频</span></div>
+            <div class="rowend">
+              <span class="hint">~/Downloads/MediaGrab</span>
+              <div class="btn prominent sm">下载</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb">
+          <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1px;width:100%;height:100%">
+            <div style="background:linear-gradient(150deg,#D9B45E,#8E7A2E)"></div>
+            <div style="background:linear-gradient(150deg,#C6A34C,#6E6329)"></div>
+            <div style="background:linear-gradient(150deg,#E0C271,#9A8438)"></div>
+            <div style="background:linear-gradient(150deg,#B8933F,#5F5524)"></div>
+          </div>
+          <span class="dur">9 张</span>
+        </div>
+        <div class="info">
+          <div class="tit">京都十一月的银杏，总共去了四次</div>
+          <div class="meta"><span class="tag">原图</span>小红书 · @aki_still · 9 张 · 24.6 MB</div>
+          <div class="cfoot">
+            <div class="chk"><em><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4"><path d="M4 12.5l5 5L20 7"/></svg></em>全选</div>
+            <span class="hint">实况照片会一并保存</span>
+            <div class="rowend"><div class="btn prominent sm">下载 9 张</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 160 100" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+            <defs>
+              <linearGradient id="m3" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#1E2E3D"/><stop offset=".42" stop-color="#C47945"/>
+                <stop offset=".62" stop-color="#E7A15A"/><stop offset="1" stop-color="#38373B"/></linearGradient>
+              <radialGradient id="mu3"><stop offset="0" stop-color="#FFE0A8" stop-opacity=".95"/>
+                <stop offset="1" stop-color="#FFCF8A" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="160" height="100" fill="url(#m3)"/>
+            <ellipse cx="80" cy="44" rx="34" ry="14" fill="url(#mu3)"/>
+            <circle cx="80" cy="44" r="7" fill="#FFE7BB"/>
+            <rect y="58" width="160" height="42" fill="#1B262F" opacity=".55"/>
+            <rect y="58" width="160" height="1" fill="#F0C08A" opacity=".5"/>
+          </svg>
+          <span class="dur">12:08</span>
+        </div>
+        <div class="info">
+          <div class="tit">海边日落延时，4K 60 帧原片</div>
+          <div class="meta">B站 · @slowtide · 3840×2160 · 1.2 GB</div>
+          <div class="cfoot">
+            <span class="lb">清晰度</span>
+            <div class="seg"><span>4K 原画</span><span class="on">1080P</span><span>720P</span></div>
+            <div class="rowend">
+              <span class="hint">4K 需要 ffmpeg 合并</span>
+              <div class="btn prominent sm">下载</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="live">
+        <span class="num" style="color:#1D1D1F;font-weight:600">68%</span>
+        <span class="t">正在下载 · <b>凌晨四点的城市，只有路灯还醒着</b></span>
+        <div class="pb"><i></i></div>
+        <span class="num">2.1 MB/s</span>
+        <span class="num" style="color:#8E8E93">剩 3 秒</span>
+      </div>
+    </div>
+
+    <div class="status">
+      <span>保存到</span>
+      <span>C:\Users\a1358\Downloads\MediaGrab</span>
+      <span class="link">更改</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6E6E73" stroke-width="1.7"><path d="M3 7.5h6l2 2.5h10v9H3z"/></svg>
+      <span class="sep"></span>
+      <span>下载方式</span><span>内置</span>
+      <span class="sep"></span>
+      <div class="sw"><i></i></div>
+      <span>下载后打开</span>
+      <span style="margin-left:auto;color:#8E8E93">就绪</span>
+    </div>
+  </div>
+</div>
+</body></html>

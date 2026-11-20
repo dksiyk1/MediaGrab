@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>MediaGrab · macOS Tahoe</title>
+<style>
+  /* ============ Design Tokens · macOS Tahoe (Liquid Glass) ============ */
+  :root{
+    --accent:#007AFF;
+    --accent-soft:rgba(0,122,255,.12);
+    --text-1:#1D1D1F;
+    --text-2:#6E6E73;
+    --text-3:#8E8E93;
+    --sep:rgba(0,0,0,.075);
+    --card-stroke:rgba(0,0,0,.065);
+    --card-shadow:0 1px 2px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.045);
+    --sidebar-w:224px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    /* SF Pro / -apple-system 放在最前会在 Windows 上把 emoji 字形吞掉（显示成方块），
+       所以先走 Segoe UI 家族，SF Pro 作为 macOS 上的兜底 */
+    font-family:"Segoe UI Variable Display","Segoe UI","Segoe UI Emoji","Microsoft YaHei UI","PingFang SC","SF Pro Text","SF Pro Display",-apple-system,sans-serif;
+    font-size:13px;color:var(--text-1);
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;
+    /* Tahoe 风格壁纸：柔和的多色雾面 */
+    background:
+      radial-gradient(1100px 700px at 8% 0%, #FFD9A8 0%, transparent 55%),
+      radial-gradient(900px 640px at 92% 8%, #A8C8FF 0%, transparent 58%),
+      radial-gradient(1000px 760px at 62% 100%, #D6B8FF 0%, transparent 55%),
+      linear-gradient(160deg,#F4E8DC 0%,#E6E9F5 45%,#DCE4F6 100%);
+  }
+
+  .window{
+    position:relative;
+    width:1200px;height:800px;border-radius:12px;overflow:hidden;
+    display:flex;
+    background:rgba(255,255,255,.74);
+    box-shadow:0 40px 90px rgba(20,26,48,.34), 0 0 0 .5px rgba(0,0,0,.18);
+  }
+  /* 刻意不用 backdrop-filter：只要页面上有大面积毛玻璃，
+     Chromium 会把子树整体 GPU 合成，标题里的 emoji 🎶 会因字体回退失效变方块。
+     壁纸本身就是柔和渐变，靠半透明白透色已经足够像 vibrancy */
+
+  /* ---------- 侧边栏 ---------- */
+  .sidebar{
+    width:var(--sidebar-w);flex:0 0 var(--sidebar-w);
+    background:rgba(244,244,247,.62);
+    border-right:.5px solid var(--sep);
+    display:flex;flex-direction:column;
+  }
+  .traffic{height:46px;display:flex;align-items:center;gap:8px;padding:0 16px}
+  .tl{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.12)}
+  .tl.r{background:#FF5F57}
+  .tl.y{background:#FEBC2E}
+  .tl.g{background:#28C840}
+
+  .side-group{padding:8px 12px 0}
+  .side-label{
+    font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--text-3);
+    padding:6px 8px;text-transform:none;
+  }
+  .side-item{
+    display:flex;align-items:center;gap:9px;
+    height:29px;padding:0 9px;border-radius:6px;
+    font-size:13px;color:var(--text-1);
+  }
+  .side-item svg{width:15px;height:15px;color:var(--text-2);flex:0 0 auto}
+  .side-item.on{background:rgba(0,0,0,.075);font-weight:600}
+  .side-item.on svg{color:var(--accent)}
+  .side-item .k{margin-left:auto;font-size:11.5px;color:var(--text-3);font-variant-numeric:tabular-nums}
+  .side-item.on .k{color:var(--text-2)}
+
+  .side-foot{
+    margin-top:auto;padding:12px 16px 16px;
+    border-top:.5px solid var(--sep);
+  }
+  .storage{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text-2);margin-bottom:6px}
+  .bar{height:4px;border-radius:2px;background:rgba(0,0,0,.08);overflow:hidden}
+  .bar i{display:block;height:100%;width:44%;background:var(--accent);border-radius:2px}
+
+  /* ---------- 内容 ---------- */
+  .content{flex:1;min-width:0;display:flex;flex-direction:column;background:rgba(255,255,255,.55)}
+  .toolbar{
+    height:52px;flex:0 0 52px;
+    display:flex;align-items:center;gap:10px;
+    padding:0 20px;
+    border-bottom:.5px solid var(--sep);
+    background:rgba(255,255,255,.42);
+  }
+  .toolbar h1{font-size:15px;font-weight:700;letter-spacing:-.2px;margin-right:auto}
+
+  .search{
+    width:200px;height:28px;border-radius:7px;
+    background:rgba(120,120,128,.11);
+    display:flex;align-items:center;gap:6px;padding:0 9px;
+    color:var(--text-3);font-size:12.5px;flex:0 0 auto;
+  }
+  .search svg{width:13px;height:13px}
+
+  /* ---------- 链接导入（一级操作区） ----------
+     这是整个软件的核心动作，必须是一级元素。
+     塞进 52px 工具栏里只有 200px 宽，抖音短链 36 字符、B站 42 字符会被截断，
+     用户看不见自己粘的是哪条链接；而且和「搜索作品」共用一个框，语义也是混的。 */
+  .importbar{
+    flex:0 0 auto;
+    padding:14px 18px 15px;
+    display:flex;align-items:center;gap:8px;
+    border-bottom:.5px solid var(--sep);
+    background:rgba(255,255,255,.26);
+  }
+  .linkfield{
+    flex:1;min-width:0;height:38px;border-radius:9px;
+    background:#fff;
+    border:.5px solid rgba(0,0,0,.13);
+    box-shadow:0 1px 2px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.9);
+    display:flex;align-items:center;gap:8px;padding:0 9px 0 10px;
+  }
+  .linkfield > svg{width:15px;height:15px;flex:0 0 auto;color:var(--text-3)}
+  .linkfield .val{
+    flex:1;min-width:0;
+    font-size:13.5px;color:var(--text-1);letter-spacing:-.1px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .linkfield .val.ph{color:var(--text-3);font-size:13px}
+  .linkfield .paste{
+    height:24px;padding:0 9px;border-radius:6px;flex:0 0 auto;
+    background:rgba(120,120,128,.14);color:var(--text-2);
+    font-size:11.5px;font-weight:500;display:flex;align-items:center;
+  }
+  .gobtn{
+    height:38px;padding:0 16px;border-radius:9px;flex:0 0 auto;
+    background:linear-gradient(#1B87FF,#0071E3);color:#fff;
+    border:.5px solid rgba(0,80,180,.55);
+    box-shadow:0 1px 2.5px rgba(0,90,190,.32);
+    font-family:inherit;font-size:13.5px;font-weight:600;white-space:nowrap;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  .btn{
+    height:28px;padding:0 14px;border-radius:7px;border:.5px solid rgba(0,0,0,.10);
+    background:linear-gradient(#FFFFFF,#F6F6F8);
+    font-family:inherit;font-size:12.5px;font-weight:500;color:var(--text-1);
+    box-shadow:0 1px 1.5px rgba(0,0,0,.07);display:flex;align-items:center;gap:6px;
+    white-space:nowrap;flex:0 0 auto;
+  }
+  .btn.pri{
+    background:linear-gradient(#1B87FF,#0071E3);color:#fff;border-color:rgba(0,80,180,.55);
+    box-shadow:0 1px 2px rgba(0,90,190,.30);
+  }
+
+  .scroll{flex:1;min-height:0;overflow:hidden;padding:18px 22px 0;display:flex;flex-direction:column;gap:16px}
+
+  /* ---------- 卡片 ---------- */
+  .card{
+    background:#fff;border-radius:12px;
+    border:.5px solid var(--card-stroke);
+    box-shadow:var(--card-shadow);
+    padding:16px 18px;
+  }
+  .hero{display:flex;flex-direction:column;gap:15px}
+
+  .row{display:flex;gap:16px}
+  .cover{
+    width:104px;height:104px;border-radius:10px;overflow:hidden;flex:0 0 auto;
+    position:relative;background:#EDEDF0;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.10);
+  }
+  .cover img{width:100%;height:100%;object-fit:cover;display:block}
+  .cover .n{
+    position:absolute;left:6px;bottom:6px;
+    font-size:10.5px;font-weight:600;color:#fff;
+    background:rgba(0,0,0,.52);border-radius:5px;padding:1px 6px;
+  }
+  .meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px;padding-top:1px}
+  .meta h2{
+    font-size:14.5px;font-weight:600;line-height:1.4;letter-spacing:-.1px;
+    max-height:2.8em;overflow:hidden;word-break:break-word;
+  }
+  .sub{font-size:12.5px;color:var(--text-2);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .dot{width:3px;height:3px;border-radius:50%;background:#C4C4C8}
+  .badges{display:flex;gap:6px;margin-top:1px}
+  .pill{
+    font-size:11px;padding:2px 8px;border-radius:20px;
+    background:rgba(120,120,128,.09);color:var(--text-2);
+  }
+  .pill.blue{background:var(--accent-soft);color:#0060D0;font-weight:600}
+
+  .hr{height:.5px;background:var(--sep);margin:0 -18px}
+
+  .ghead{display:flex;align-items:baseline;justify-content:space-between}
+  .ghead b{font-size:12.5px;font-weight:600}
+  .ghead span{font-size:12px;color:var(--text-3)}
+  .thumbs{display:flex;gap:10px}
+  .th{
+    width:82px;height:82px;border-radius:9px;overflow:hidden;position:relative;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12);
+  }
+  .th img{width:100%;height:100%;object-fit:cover;display:block}
+  .th.sel{box-shadow:0 0 0 2.5px var(--accent), 0 0 0 3.5px rgba(255,255,255,.9)}
+  .th .ck{
+    position:absolute;right:5px;top:5px;width:16px;height:16px;border-radius:50%;
+    background:var(--accent);display:grid;place-items:center;
+    box-shadow:0 1px 3px rgba(0,0,0,.3);
+  }
+  .th .ck svg{width:9px;height:9px;color:#fff}
+
+  .foot{display:flex;align-items:center;gap:12px}
+  .foot .hint{font-size:12px;color:var(--text-3);flex:1}
+  .foot .hint b{color:var(--text-2);font-weight:500}
+  .switch{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-2)}
+  .sw{width:34px;height:20px;border-radius:10px;background:#34C759;position:relative}
+  .sw::after{content:"";position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+
+  /* 分段控件 */
+  .seg{display:flex;background:rgba(120,120,128,.10);border-radius:8px;padding:2px;gap:2px}
+  .seg span{
+    font-size:12px;font-weight:500;padding:3px 11px;border-radius:6px;color:var(--text-2);white-space:nowrap;
+  }
+  .seg span.on{
+    background:#fff;color:var(--text-1);font-weight:600;
+    box-shadow:0 1px 2px rgba(0,0,0,.10), 0 0 0 .5px rgba(0,0,0,.04);
+  }
+
+  /* 列表行 */
+  .listrow{display:flex;align-items:center;gap:14px;padding:12px 18px}
+  .listrow .cover{width:52px;height:52px;border-radius:8px}
+  .listrow .meta{gap:3px}
+  .listrow .meta h2{font-size:13px;font-weight:600;max-height:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .listrow .sub{font-size:11.5px}
+  .icon-btn{
+    width:28px;height:28px;border-radius:7px;display:grid;place-items:center;
+    color:var(--text-2);border:.5px solid transparent;
+  }
+  .icon-btn:hover{background:rgba(120,120,128,.10)}
+  .icon-btn svg{width:15px;height:15px}
+</style>
+</head>
+<body>
+<div class="window">
+
+  <!-- 侧边栏 -->
+  <div class="sidebar">
+    <div class="traffic">
+      <div class="tl r"></div><div class="tl y"></div><div class="tl g"></div>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">资料库</div>
+      <div class="side-item on">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="1.8" y="2.6" width="12.4" height="10.8" rx="2.2"/>
+          <path d="M1.8 6h12.4"/>
+        </svg>
+        全部解析<span class="k">12</span>
+      </div>
+      <div class="side-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="1.8" y="2.6" width="12.4" height="10.8" rx="2.2"/>
+          <path d="M5 9.4l2-2.4 1.6 1.8 1.4-1.4 2 2.4" stroke-linejoin="round"/>
+          <circle cx="5.6" cy="5.6" r=".9" fill="currentColor" stroke="none"/>
+        </svg>
+        图片
+      </div>
+      <div class="side-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="1.6" y="3.4" width="12.8" height="9.2" rx="2.2"/>
+          <path d="M6.6 6.2l3.6 1.8-3.6 1.8z" fill="currentColor" stroke="none"/>
+        </svg>
+        视频
+      </div>
+      <div class="side-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M3.2 8.2 6.4 11.4 12.8 4.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        已完成
+      </div>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">标签</div>
+      <div class="side-item"><span style="width:8px;height:8px;border-radius:50%;background:#FF9500"></span>待下载</div>
+      <div class="side-item"><span style="width:8px;height:8px;border-radius:50%;background:#34C759"></span>无水印原图</div>
+    </div>
+
+    <div class="side-foot">
+      <div class="storage"><span>磁盘</span><span>128 GB 可用</span></div>
+      <div class="bar"><i></i></div>
+    </div>
+  </div>
+
+  <!-- 内容 -->
+  <div class="content">
+    <div class="toolbar">
+      <h1>全部解析</h1>
+      <div class="search">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="6.8" cy="6.8" r="4.2"/><path d="M10 10l3.2 3.2" stroke-linecap="round"/>
+        </svg>
+        搜索作品
+      </div>
+    </div>
+
+    <!-- 链接导入：一级操作区 -->
+    <div class="importbar">
+      <div class="linkfield">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M6.3 9.7l3.4-3.4" stroke-linecap="round"/>
+          <path d="M8.5 5.3l1.2-1.2a2.1 2.1 0 013 3l-1.2 1.2" stroke-linecap="round"/>
+          <path d="M7.5 10.7l-1.2 1.2a2.1 2.1 0 01-3-3l1.2-1.2" stroke-linecap="round"/>
+        </svg>
+        <span class="val">https://www.bilibili.com/video/BV1pmxK6REXd</span>
+        <span class="paste">粘贴</span>
+      </div>
+      <div class="gobtn">解析</div>
+    </div>
+
+    <div class="scroll">
+      <!-- 主结果 -->
+      <div class="card hero">
+        <div class="row">
+          <div class="cover">
+            <img src="assets/photo1.jpg" alt="">
+            <div class="n">3 张</div>
+          </div>
+          <div class="meta">
+            <h2>就算变成小僵尸，也还是想唱歌🎶。📷：自己 出镜：鲨鲨 #cos #摄影 #初音未来 #二次元 #cosplay</h2>
+            <div class="sub">
+              <span>抖音</span><i class="dot"></i>
+              <span>宗圆kzy.</span><i class="dot"></i>
+              <span>2160 × 3024</span>
+            </div>
+            <div class="badges">
+              <span class="pill blue">无水印</span>
+              <span class="pill">原图</span>
+              <span class="pill">WebP</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="ghead"><b>图集</b><span>已选 3 / 3</span></div>
+        <div class="thumbs">
+          <div class="th sel"><img src="assets/photo1.jpg" alt="">
+            <div class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1.6 5.2 3.9 7.5 8.4 2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div class="th sel"><img src="assets/photo2.jpg" alt="">
+            <div class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1.6 5.2 3.9 7.5 8.4 2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div class="th sel"><img src="assets/photo3.jpg" alt="">
+            <div class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1.6 5.2 3.9 7.5 8.4 2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+        </div>
+
+        <div class="foot">
+          <div class="hint">保存到 <b>下载 / MediaGrab</b></div>
+          <div class="switch"><span>下载后打开</span><div class="sw"></div></div>
+          <div class="btn">全选</div>
+          <div class="btn pri">下载选中</div>
+        </div>
+      </div>
+
+      <!-- 视频结果 -->
+      <div class="card" style="padding:0">
+        <div class="listrow">
+          <div class="cover"><img src="assets/photo2.jpg" alt=""></div>
+          <div class="meta">
+            <h2>我这样的人 我什么样 我又这样 我又哪样 #少女感 #女大学生</h2>
+            <div class="sub"><span>抖音</span><i class="dot"></i><span>y28.</span><i class="dot"></i><span>00:11</span></div>
+          </div>
+          <div class="seg"><span class="on">1080P</span><span>720P</span><span>576P</span></div>
+          <div class="icon-btn">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M8 2.4v7.4M5.2 7.2 8 10l2.8-2.8M2.8 12.4h10.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:0">
+        <div class="listrow">
+          <div class="cover"><img src="assets/photo3.jpg" alt=""></div>
+          <div class="meta">
+            <h2>反诈博主"徽剑"被曝 2 年前遭买凶遇害</h2>
+            <div class="sub"><span>哔哩哔哩</span><i class="dot"></i><span>极客湾</span><i class="dot"></i><span>57:14</span></div>
+          </div>
+          <div class="seg"><span class="on">1080P</span><span>720P</span><span>360P</span></div>
+          <div class="icon-btn">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M8 2.4v7.4M5.2 7.2 8 10l2.8-2.8M2.8 12.4h10.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

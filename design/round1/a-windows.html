@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>MediaGrab · Windows 11 Fluent</title>
+<style>
+  /* ============ Design Tokens · Windows 11 Fluent ============ */
+  :root{
+    --accent:#0067C0;          /* Windows Accent Blue */
+    --accent-hover:#1975C5;
+    --accent-press:#005BA4;
+    --text-1:#1A1A1A;
+    --text-2:#5D5D5D;
+    --text-3:#8A8A8A;
+    --card:#FFFFFF;
+    --card-stroke:rgba(0,0,0,.0578);
+    --card-shadow:0 2px 4px rgba(0,0,0,.04);
+    --layer:#FBFBFB;
+    --divider:rgba(0,0,0,.0803);
+    --radius-window:8px;
+    --radius-card:8px;
+    --radius-ctrl:4px;
+    --focus:2px solid #1A1A1A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI Variable Display","Segoe UI","Segoe UI Emoji","Noto Color Emoji",system-ui,-apple-system,sans-serif;
+    font-size:14px;
+    color:var(--text-1);
+    background:#8E9BA8;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* Mica：壁纸采样出来的柔和底色 + 极细噪声 */
+  .window{
+    position:relative;
+    width:1200px;height:800px;
+    border-radius:var(--radius-window);
+    overflow:hidden;
+    background:
+      radial-gradient(900px 500px at 12% -8%, #DCE6F2 0%, transparent 62%),
+      radial-gradient(760px 460px at 96% 4%, #E8E1F0 0%, transparent 58%),
+      linear-gradient(168deg,#F7F8FA 0%,#F1F2F4 52%,#EDEFF2 100%);
+    box-shadow:0 32px 72px rgba(16,24,40,.30), 0 0 0 1px rgba(0,0,0,.10);
+    display:flex;flex-direction:column;
+  }
+  .window::after{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.030;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- 标题栏 ---------- */
+  .titlebar{
+    height:40px;flex:0 0 40px;
+    display:flex;align-items:center;
+    padding-left:14px;
+    -webkit-app-region:drag;
+  }
+  .app-mark{width:16px;height:16px;margin-right:10px;flex:0 0 auto}
+  .app-title{font-size:12px;color:var(--text-2);letter-spacing:.1px}
+  .win-ctrl{margin-left:auto;display:flex;height:40px}
+  .win-ctrl div{
+    width:46px;display:grid;place-items:center;
+    color:var(--text-1);
+  }
+  .win-ctrl div:hover{background:rgba(0,0,0,.05)}
+  .win-ctrl .close:hover{background:#C42B1C;color:#fff}
+  .win-ctrl i{display:block;width:10px;height:1px;background:currentColor}
+  .win-ctrl .max i{height:9px;width:9px;border:1px solid currentColor;background:transparent}
+  .win-ctrl .close svg{width:10px;height:10px}
+
+  /* ---------- 主体 ---------- */
+  .body{flex:1;display:flex;min-height:0}
+  .nav{
+    width:52px;flex:0 0 52px;
+    padding:6px 0;
+    display:flex;flex-direction:column;align-items:center;gap:2px;
+  }
+  .nav button{
+    width:40px;height:36px;border:0;background:transparent;border-radius:var(--radius-ctrl);
+    display:grid;place-items:center;color:var(--text-2);position:relative;
+    cursor:pointer;transition:background .12s;
+  }
+  .nav button:hover{background:rgba(0,0,0,.045)}
+  .nav button.on{color:var(--accent)}
+  .nav button.on::before{
+    content:"";position:absolute;left:-6px;top:50%;transform:translateY(-50%);
+    width:3px;height:16px;background:var(--accent);border-radius:2px;
+  }
+  .nav svg{width:17px;height:17px}
+
+  .content{flex:1;min-width:0;padding:6px 24px 0 8px;overflow:hidden;display:flex;flex-direction:column;gap:14px}
+
+  /* ---------- 输入区 ---------- */
+  .inputrow{display:flex;gap:8px}
+  .field{
+    flex:1;display:flex;align-items:center;gap:9px;
+    height:40px;padding:0 12px;
+    background:var(--layer);
+    border:1px solid var(--card-stroke);
+    border-bottom:2px solid #7A7A7A;
+    border-radius:var(--radius-ctrl);
+    transition:border-color .12s, background .12s;
+  }
+  .field:focus-within{border-bottom-color:var(--accent);background:#fff}
+  .field svg{width:15px;height:15px;color:var(--text-2);flex:0 0 auto}
+  .field .val{flex:1;font-size:13.5px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .field .val .scheme{color:var(--text-3)}
+  .field .chip{
+    font-size:11px;color:var(--accent);background:rgba(0,103,192,.09);
+    padding:2px 7px;border-radius:3px;font-weight:600;flex:0 0 auto;
+  }
+  .btn{
+    height:40px;padding:0 22px;border-radius:var(--radius-ctrl);border:1px solid transparent;
+    font-family:inherit;font-size:13.5px;font-weight:600;letter-spacing:.1px;
+    background:var(--accent);color:#fff;cursor:pointer;
+    box-shadow:0 1px 2px rgba(0,0,0,.10);
+    transition:background .12s;
+  }
+  .btn:hover{background:var(--accent-hover)}
+  .btn.ghost{background:var(--layer);color:var(--text-1);border-color:var(--card-stroke);box-shadow:none}
+  .btn.ghost:hover{background:#F3F3F3}
+
+  /* ---------- 结果卡 ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-stroke);
+    border-radius:var(--radius-card);
+    box-shadow:var(--card-shadow);
+    padding:16px;
+  }
+  .card.hero{display:flex;flex-direction:column;gap:14px}
+  .head{display:flex;gap:14px}
+  .cover{
+    width:108px;height:108px;border-radius:var(--radius-ctrl);overflow:hidden;flex:0 0 auto;
+    background:#EDEDED;position:relative;
+    box-shadow:0 0 0 1px rgba(0,0,0,.06);
+  }
+  .cover img{width:100%;height:100%;object-fit:cover;display:block}
+  .cover .badge{
+    position:absolute;left:5px;bottom:5px;
+    font-size:10px;font-weight:600;color:#fff;
+    background:rgba(0,0,0,.62);border-radius:3px;padding:1px 5px;
+    backdrop-filter:blur(6px);
+  }
+  .meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;padding-top:2px}
+  .meta h2{
+    font-size:15px;font-weight:600;line-height:1.42;
+    /* 用 max-height 截断而不是 -webkit-line-clamp：
+       后者会套一层特殊排版盒，导致 emoji 字体回退失效（标题里的 🎶 变方块） */
+    max-height:2.84em;overflow:hidden;word-break:break-word;
+  }
+  .sub{font-size:12.5px;color:var(--text-2);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .dot{width:3px;height:3px;border-radius:50%;background:var(--text-3)}
+  .tags{display:flex;gap:5px;margin-top:2px}
+  .tag{
+    font-size:11px;color:var(--text-2);background:#F3F3F3;
+    border:1px solid var(--card-stroke);border-radius:3px;padding:1px 6px;
+  }
+  .tag.hi{color:var(--accent);background:rgba(0,103,192,.08);border-color:rgba(0,103,192,.18);font-weight:600}
+
+  /* 分隔 */
+  .sep{height:1px;background:var(--divider);margin:0 -16px}
+
+  /* 图集 */
+  .gallery-head{display:flex;align-items:center;justify-content:space-between}
+  .gallery-head .lbl{font-size:12px;font-weight:600;color:var(--text-2)}
+  .gallery-head .cnt{font-size:12px;color:var(--text-3)}
+  .thumbs{display:flex;gap:8px}
+  .th{
+    width:76px;height:76px;border-radius:var(--radius-ctrl);overflow:hidden;position:relative;
+    outline:2px solid transparent;outline-offset:-2px;
+    border:1px solid rgba(0,103,192,.55);
+    cursor:pointer;
+  }
+  .th img{width:100%;height:100%;object-fit:cover;display:block}
+  .th.off{border-color:transparent;opacity:.42}
+  .th.off::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.55)}
+  .th .num{
+    position:absolute;left:3px;top:3px;width:15px;height:15px;border-radius:50%;
+    background:var(--accent);color:#fff;font-size:9px;font-weight:700;
+    display:grid;place-items:center;
+  }
+  .th.off .num{background:#8A8A8A}
+
+  /* 底部操作 */
+  .foot{display:flex;align-items:center;gap:10px}
+  .foot .hint{font-size:12px;color:var(--text-3);flex:1}
+  .foot .hint b{color:var(--text-2);font-weight:600}
+  .toggle{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-2)}
+  .tgl{width:38px;height:20px;border-radius:10px;background:var(--accent);position:relative}
+  .tgl::after{content:"";position:absolute;top:4px;right:3px;width:12px;height:12px;border-radius:50%;background:#fff}
+
+  /* 第二张卡（视频，露出上半） */
+  .card.mini{padding:14px 16px}
+  .mini-row{display:flex;gap:13px;align-items:center}
+  .mini .cover{width:64px;height:64px}
+  .mini .meta{gap:4px}
+  .mini .meta h2{font-size:13.5px;max-height:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .segs{display:flex;gap:2px;background:#F3F3F3;border:1px solid var(--card-stroke);border-radius:5px;padding:2px}
+  .segs span{font-size:11.5px;padding:3px 9px;border-radius:3px;color:var(--text-2);white-space:nowrap}
+  .segs span.on{background:#fff;color:var(--text-1);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+  /* ---------- 状态栏 ---------- */
+  .statusbar{
+    height:46px;flex:0 0 46px;
+    display:flex;align-items:center;gap:14px;
+    padding:0 18px;
+    border-top:1px solid var(--divider);
+    background:rgba(255,255,255,.55);
+    backdrop-filter:blur(20px);
+    font-size:12px;color:var(--text-2);
+  }
+  .statusbar .path{
+    display:flex;align-items:center;gap:6px;flex:1;min-width:0;
+    color:var(--text-2);
+  }
+  .statusbar .path span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:330px}
+  .statusbar svg{width:14px;height:14px;color:var(--text-3);flex:0 0 auto}
+  .prog{width:118px;height:3px;border-radius:2px;background:rgba(0,0,0,.09);overflow:hidden}
+  .prog i{display:block;height:100%;width:68%;background:var(--accent);border-radius:2px}
+  .statusbar .ok{color:#0F7B0F;font-weight:600;display:flex;align-items:center;gap:5px}
+  .statusbar .ok svg{color:#0F7B0F}
+</style>
+</head>
+<body>
+<div class="window">
+
+  <!-- 标题栏 -->
+  <div class="titlebar">
+    <svg class="app-mark" viewBox="0 0 16 16" fill="none">
+      <rect x="1" y="2.4" width="14" height="11.2" rx="2" stroke="#0067C0" stroke-width="1.3"/>
+      <path d="M5.4 6.2 7.9 8 5.4 9.8" stroke="#0067C0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8.8 9.9h2.1" stroke="#0067C0" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <div class="app-title">MediaGrab</div>
+    <div class="win-ctrl">
+      <div><i></i></div>
+      <div class="max"><i></i></div>
+      <div class="close"><svg viewBox="0 0 10 10"><path d="M1 1l8 8M9 1l-8 8" stroke="currentColor" stroke-width="1.2"/></svg></div>
+    </div>
+  </div>
+
+  <div class="body">
+    <!-- 导航条 -->
+    <div class="nav">
+      <button class="on">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 8.2 10 2.5l7 5.7V17a1 1 0 0 1-1 1h-3.6v-5.2H7.6V18H4a1 1 0 0 1-1-1z" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button>
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2.8" y="3.4" width="14.4" height="13.2" rx="1.6"/>
+          <path d="M2.8 7.1h14.4M7.2 7.1v9.5"/>
+        </svg>
+      </button>
+      <button>
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 6.2h14M3 10h14M3 13.8h9"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="content">
+      <!-- 输入 -->
+      <div class="inputrow">
+        <div class="field">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+            <path d="M6.6 2.2v9.1a1.5 1.5 0 0 0 1.5 1.5h4.2" stroke-linecap="round"/>
+            <path d="M9.6 5.4H5.2a2.4 2.4 0 0 0 0 4.8" stroke-linecap="round" opacity=".55"/>
+          </svg>
+          <div class="val"><span class="scheme">https://</span>v.douyin.com/dcJJwUpngMI/</div>
+          <div class="chip">抖音</div>
+        </div>
+        <button class="btn">解析</button>
+      </div>
+
+      <!-- 主结果 -->
+      <div class="card hero">
+        <div class="head">
+          <div class="cover">
+            <img src="assets/photo1.jpg" alt="">
+            <div class="badge">3 张</div>
+          </div>
+          <div class="meta">
+            <h2>就算变成小僵尸，也还是想唱歌🎶。📷：自己 出镜：鲨鲨 #cos #摄影 #初音未来 #二次元 #cosplay</h2>
+            <div class="sub">
+              <span>抖音</span><i class="dot"></i>
+              <span>宗圆kzy.</span><i class="dot"></i>
+              <span>图文 · 2160 × 3024</span>
+            </div>
+            <div class="tags">
+              <span class="tag hi">无水印</span>
+              <span class="tag">原图</span>
+              <span class="tag">WebP</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="gallery-head">
+          <div class="lbl">图集</div>
+          <div class="cnt">已选 3 / 3</div>
+        </div>
+        <div class="thumbs">
+          <div class="th"><img src="assets/photo1.jpg" alt=""><div class="num">1</div></div>
+          <div class="th"><img src="assets/photo2.jpg" alt=""><div class="num">2</div></div>
+          <div class="th"><img src="assets/photo3.jpg" alt=""><div class="num">3</div></div>
+        </div>
+
+        <div class="foot">
+          <div class="hint">保存到 <b>C:\Users\a1358\Downloads\MediaGrab</b></div>
+          <div class="toggle"><span>下载后打开文件夹</span><div class="tgl"></div></div>
+          <button class="btn ghost">全选</button>
+          <button class="btn">下载选中</button>
+        </div>
+      </div>
+
+      <!-- 次结果（视频） -->
+      <div class="card mini">
+        <div class="mini-row">
+          <div class="cover"><img src="assets/photo2.jpg" alt=""></div>
+          <div class="meta">
+            <h2>我这样的人 我什么样 我又这样 我又哪样 #少女感 #女大学生</h2>
+            <div class="sub">
+              <span>抖音</span><i class="dot"></i><span>y28.</span><i class="dot"></i><span>00:11</span>
+            </div>
+          </div>
+          <div class="segs">
+            <span class="on">1080P</span>
+            <span>720P</span>
+            <span>576P</span>
+          </div>
+          <button class="btn ghost">下载</button>
+        </div>
+      </div>
+
+      <!-- 第三条：列表继续往下滚，底部自然被状态栏裁切 -->
+      <div class="card mini">
+        <div class="mini-row">
+          <div class="cover"><img src="assets/photo3.jpg" alt=""></div>
+          <div class="meta">
+            <h2>反诈博主"徽剑"被曝 2 年前遭买凶遇害</h2>
+            <div class="sub">
+              <span>哔哩哔哩</span><i class="dot"></i><span>极客湾</span><i class="dot"></i><span>57:14</span>
+            </div>
+          </div>
+          <div class="segs">
+            <span class="on">1080P</span>
+            <span>720P</span>
+            <span>360P</span>
+          </div>
+          <button class="btn ghost">下载</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 状态栏 -->
+  <div class="statusbar">
+    <div class="path">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M1.8 5.1h4l1.3 1.6h7.1v6.2a1 1 0 0 1-1 1H2.8a1 1 0 0 1-1-1z" stroke-linejoin="round"/>
+      </svg>
+      <span>C:\Users\a1358\Downloads\MediaGrab</span>
+    </div>
+    <div class="prog"><i></i></div>
+    <div class="ok">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M2.6 7.4 5.5 10.3 11.4 4.1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      已下载 2 / 3
+    </div>
+  </div>
+</div>
+</body>
+</html>

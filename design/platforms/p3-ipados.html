@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><style>
+/* iPadOS 26 / iOS HIG — 大标题、分组内嵌卡片、浮动标签栏 */
+:root{
+  --blue:#007AFF; --green:#34C759; --bg:#F2F2F7; --card:#FFFFFF;
+  --label:#000000; --label2:rgba(60,60,67,.6); --label3:rgba(60,60,67,.3);
+  --sep:rgba(60,60,67,.29); --fill:rgba(120,120,128,.12); --fill2:rgba(120,120,128,.2);
+  --font:-apple-system,"SF Pro Display","SF Pro Text","Segoe UI","Microsoft YaHei UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1180px;height:760px;overflow:hidden;font-family:var(--font);
+  -webkit-font-smoothing:antialiased;letter-spacing:-.015em;
+  background:linear-gradient(160deg,#F6D9C9,#D8C7E8 40%,#BBD3EA 72%,#CBE3D8)}
+.win{width:1180px;height:760px;display:flex;flex-direction:column;background:var(--bg);
+  border-radius:22px;overflow:hidden;position:relative;
+  box-shadow:0 40px 90px rgba(50,40,60,.30)}
+/* nav bar */
+.navbar{height:48px;flex:0 0 48px;display:flex;align-items:center;padding:0 22px;gap:8px}
+.navbar .t{font-size:17px;font-weight:600;opacity:0}
+.navbar .r{margin-left:auto;display:flex;align-items:center;gap:14px}
+.navbar .r svg{color:var(--blue)}
+/* large title */
+.large{padding:8px 22px 0}
+.large h1{font-size:31px;font-weight:700;letter-spacing:-.02em;line-height:38px;color:var(--label)}
+.large .sub{margin-top:2px;font-size:13px;color:var(--label2)}
+/* search */
+.filters{padding:10px 22px 0}
+.fseg{display:flex;width:fit-content;height:32px;padding:2px;border-radius:9px;background:var(--fill);gap:2px}
+.fseg span{display:flex;align-items:center;justify-content:center;padding:0 16px;font-size:13px;
+  color:var(--label);border-radius:7px}
+.fseg span.on{background:#fff;font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.04)}
+.search{height:36px;border-radius:11px;background:var(--fill);display:flex;align-items:center;
+  gap:7px;padding:0 10px;font-size:17px;color:var(--label2)}
+/* import */
+.imp{margin:10px 22px 0;background:var(--card);border-radius:16px;padding:12px 14px;
+  display:flex;align-items:center;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.imp .ph{flex:1;font-size:15px;color:var(--label3);line-height:1.4}
+.pill{height:38px;padding:0 20px;border-radius:19px;background:var(--blue);color:#fff;font-size:16px;
+  font-weight:600;display:flex;align-items:center;justify-content:center}
+.pill.soft{background:var(--fill);color:var(--blue);font-weight:500;padding:0 16px;font-size:15px}
+/* list */
+.list{flex:1;overflow:hidden;padding:10px 22px 0;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border-radius:18px;padding:9px 12px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.crow{display:flex;gap:12px;align-items:center}
+.thumb{width:52px;height:52px;flex:0 0 52px;border-radius:14px;overflow:hidden;position:relative;
+  background:#111}
+.thumb .dur{position:absolute;right:3px;bottom:3px;font-size:9px;color:#fff;
+  background:rgba(0,0,0,.52);border-radius:4px;padding:0 3px;font-variant-numeric:tabular-nums}
+.ci{flex:1;min-width:0}
+.tit{font-size:17px;font-weight:600;color:var(--label);line-height:22px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.meta{margin-top:2px;font-size:13px;color:var(--label2);display:flex;align-items:center;gap:6px}
+.tag{font-size:11px;color:#0A6BC4;background:rgba(0,122,255,.12);border-radius:5px;padding:1px 5px;
+  font-weight:600}
+.chev{color:var(--label3);flex:0 0 8px}
+.cfoot{margin-top:9px;display:flex;align-items:center;gap:9px}
+.seg{display:flex;flex:0 1 auto;height:30px;padding:2px;border-radius:8px;background:var(--fill);gap:2px}
+.seg span{flex:0 0 auto;min-width:56px;padding:0 12px;display:flex;align-items:center;justify-content:center;font-size:12.5px;
+  color:var(--label);border-radius:7px}
+.seg span.on{background:#fff;font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.04)}
+.pill.sm{height:30px;padding:0 16px;font-size:13.5px;border-radius:15px;margin-left:auto}
+/* progress */
+.livecard{background:var(--card);border-radius:18px;padding:11px 13px;margin-top:auto;margin-bottom:8px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.livetop{display:flex;align-items:center;gap:8px}
+.livetop .t{flex:1;font-size:13px;color:var(--label2);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.livetop .t b{color:var(--label);font-weight:600}
+.pb{height:4px;border-radius:2px;background:var(--fill2);margin-top:10px;overflow:hidden}
+.pb i{display:block;height:100%;width:68%;background:var(--blue);border-radius:2px}
+.num{font-size:12px;color:var(--label2);font-variant-numeric:tabular-nums}
+/* footer */
+.footbar{height:32px;flex:0 0 32px;display:flex;align-items:center;gap:8px;padding:0 22px;
+  font-size:11px;color:var(--label2)}
+.dot{width:3px;height:3px;border-radius:50%;background:var(--label3)}
+/* tab bar */
+.tabbar{height:72px;flex:0 0 72px;display:flex;align-items:center;justify-content:center;padding-bottom:10px}
+.tabs{display:flex;align-items:center;gap:4px;padding:7px 10px;border-radius:28px;
+  background:rgba(255,255,255,.72);backdrop-filter:blur(30px) saturate(180%);
+  box-shadow:0 8px 24px rgba(0,0,0,.12),inset 0 .5px 0 rgba(255,255,255,.9)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 14px;border-radius:20px;
+  font-size:10px;color:var(--label2);letter-spacing:0}
+.tab svg{width:22px;height:22px}
+.tab.on{color:var(--blue);background:rgba(0,122,255,.10)}
+.tab.on svg{stroke-width:2.1}
+</style></head><body>
+<div class="win">
+  <div class="navbar">
+    <div class="r">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v3M12 18.2v3M2.8 12h3M18.2 12h3M5.5 5.5l2.1 2.1M16.4 16.4l2.1 2.1M18.5 5.5l-2.1 2.1M7.6 16.4L5.5 18.5"/></svg>
+    </div>
+  </div>
+
+  <div class="large">
+    <h1>全部解析</h1>
+    <div class="sub">12 项 · 2 项下载中</div>
+  </div>
+
+  <div class="filters">
+    <div class="fseg">
+      <span class="on">全部</span><span>图片</span><span>视频</span><span>已完成</span>
+    </div>
+  </div>
+
+  <div class="imp">
+    <div class="ph">粘贴抖音 / B站 / 小红书链接<br>支持一次粘贴多条</div>
+    <div class="pill soft">粘贴</div>
+    <div class="pill">解析</div>
+  </div>
+
+  <div class="list">
+    <div class="card">
+      <div class="crow">
+        <div class="thumb">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+            <defs>
+              <linearGradient id="i1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#0A1420"/><stop offset=".5" stop-color="#192939"/>
+                <stop offset="1" stop-color="#060B12"/></linearGradient>
+              <radialGradient id="il1"><stop offset="0" stop-color="#FFC873" stop-opacity=".9"/>
+                <stop offset="1" stop-color="#FFC873" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="100" height="100" fill="url(#i1)"/>
+            <rect x="62" y="24" width="20" height="76" fill="#0F1A27"/>
+            <rect x="12" y="52" width="18" height="48" fill="#0C1724"/>
+            <ellipse cx="38" cy="62" rx="24" ry="11" fill="url(#il1)"/>
+            <rect x="37.4" y="30" width="1.4" height="70" fill="#26364A"/>
+            <circle cx="38" cy="30" r="2.6" fill="#FFDCA4"/>
+          </svg>
+          <span class="dur">00:42</span>
+        </div>
+        <div class="ci">
+          <div class="tit">凌晨四点的城市，只有路灯还醒着</div>
+          <div class="meta"><span class="tag">无水印</span>抖音 · @林间摄影 · 1920×1080 · 8.4 MB</div>
+        </div>
+        <svg class="chev" width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5.5 5.5L1 12"/></svg>
+      </div>
+      <div class="cfoot">
+        <div class="seg"><span class="on">1080P 原画</span><span>720P</span><span>音频</span></div>
+        <div class="pill sm">下载</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="crow">
+        <div class="thumb">
+          <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1px;width:100%;height:100%">
+            <div style="background:linear-gradient(150deg,#D9B45E,#8E7A2E)"></div>
+            <div style="background:linear-gradient(150deg,#C6A34C,#6E6329)"></div>
+            <div style="background:linear-gradient(150deg,#E0C271,#9A8438)"></div>
+            <div style="background:linear-gradient(150deg,#B8933F,#5F5524)"></div>
+          </div>
+        </div>
+        <div class="ci">
+          <div class="tit">京都十一月的银杏，总共去了四次</div>
+          <div class="meta"><span class="tag">原图</span>小红书 · @aki_still · 9 张 · 24.6 MB</div>
+        </div>
+        <svg class="chev" width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5.5 5.5L1 12"/></svg>
+      </div>
+      <div class="cfoot">
+        <div class="seg"><span class="on">全部 9 张</span><span>仅第 1–4</span></div>
+        <div class="pill sm">下载 9 张</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="crow">
+        <div class="thumb">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+            <defs>
+              <linearGradient id="i3" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#1E2E3D"/><stop offset=".42" stop-color="#C47945"/>
+                <stop offset=".62" stop-color="#E7A15A"/><stop offset="1" stop-color="#38373B"/></linearGradient>
+              <radialGradient id="iu3"><stop offset="0" stop-color="#FFE0A8" stop-opacity=".95"/>
+                <stop offset="1" stop-color="#FFCF8A" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="100" height="100" fill="url(#i3)"/>
+            <ellipse cx="50" cy="46" rx="30" ry="13" fill="url(#iu3)"/>
+            <circle cx="50" cy="46" r="6" fill="#FFE7BB"/>
+            <rect y="60" width="100" height="40" fill="#1B262F" opacity=".55"/>
+            <rect y="60" width="100" height="1" fill="#F0C08A" opacity=".5"/>
+          </svg>
+          <span class="dur">12:08</span>
+        </div>
+        <div class="ci">
+          <div class="tit">海边日落延时，4K 60 帧原片</div>
+          <div class="meta">B站 · @slowtide · 3840×2160 · 1.2 GB</div>
+        </div>
+        <svg class="chev" width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5.5 5.5L1 12"/></svg>
+      </div>
+      <div class="cfoot">
+        <div class="seg"><span class="on">1080P</span><span>4K</span><span>720P</span></div>
+        <div class="pill sm">下载</div>
+      </div>
+    </div>
+
+    <div class="livecard">
+      <div class="livetop">
+        <span class="num" style="color:#000;font-weight:600">68%</span>
+        <span class="t"><b>凌晨四点的城市，只有路灯还醒着</b>　1080P</span>
+        <span class="num">2.1 MB/s</span>
+      </div>
+      <div class="pb"><i></i></div>
+    </div>
+  </div>
+
+  <div class="footbar">
+    <span>保存到 Downloads/MediaGrab</span>
+    <span class="dot"></span>
+    <span style="color:var(--blue)">更改</span>
+    <span class="dot"></span>
+    <span>内置下载器</span>
+    <span style="margin-left:auto">就绪</span>
+  </div>
+
+  <div class="tabbar">
+    <div class="tabs">
+      <div class="tab on">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>
+        解析</div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3.5v11M7.5 10.5L12 15l4.5-4.5M4 20.5h16"/></svg>
+        队列</div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.2l3.4 2"/></svg>
+        历史</div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v3M12 17.5v3"/></svg>
+        嗅探</div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v3M12 18.2v3M2.8 12h3M18.2 12h3M5.5 5.5l2.1 2.1M16.4 16.4l2.1 2.1M18.5 5.5l-2.1 2.1M7.6 16.4L5.5 18.5"/></svg>
+        设置</div>
+    </div>
+  </div>
+</body></html>

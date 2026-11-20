@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<style>
+:root{
+  --ink:#15151A; --ink2:#5B5B63; --ink3:#93939B; --line:#E3E3DC; --line2:#EFEFE9;
+  --paper:#F7F7F4; --card:#FFFFFF; --red:#C0392B; --ok:#2F7D4F;
+  --f:"Segoe UI Variable Display","Segoe UI","Microsoft YaHei UI",sans-serif;
+  --m:Consolas,"SF Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:1200px}
+body{width:1200px;font-family:var(--f);background:var(--paper);color:var(--ink);
+  padding:42px 48px 36px;-webkit-font-smoothing:antialiased}
+.eyebrow{font-size:9.5px;letter-spacing:.24em;color:var(--ink3);font-weight:600}
+h1{font-size:24px;font-weight:600;letter-spacing:-.4px;margin-top:10px}
+h1 em{font-style:normal;color:var(--ink3);font-weight:400}
+.dek{font-size:12px;color:var(--ink2);line-height:1.75;margin-top:10px;max-width:680px}
+.dek b{color:var(--ink);font-weight:600}
+.meta{margin-left:auto;text-align:right;font-size:10px;color:var(--ink3);line-height:1.9}
+.meta b{display:block;font-size:11px;color:var(--ink2);font-weight:500}
+.head{display:flex;align-items:flex-start;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.sect{font-size:9.5px;letter-spacing:.2em;color:var(--ink3);font-weight:600;margin:30px 0 14px}
+
+/* 三案一览 */
+.three{display:flex;gap:16px}
+.tc{flex:1;background:var(--card);border-radius:14px;padding:20px 20px 18px;
+  box-shadow:0 3px 14px rgba(18,18,24,.05);display:flex;flex-direction:column}
+.tc .mark{height:96px;display:flex;align-items:center;justify-content:center}
+.tc .nm{font-size:13px;font-weight:600;margin-top:12px;letter-spacing:-.2px}
+.tc .nm span{font-family:var(--m);font-size:9px;color:var(--ink3);font-weight:400;
+  margin-left:6px;letter-spacing:.1em}
+.tc .tag{display:inline-block;font-size:9px;color:var(--ink3);border:1px solid var(--line);
+  border-radius:20px;padding:2.5px 8px;margin-top:8px;align-self:flex-start;letter-spacing:.04em}
+.tc p{font-size:10.5px;color:var(--ink2);line-height:1.7;margin-top:9px}
+.tc.now{outline:1.5px solid var(--ink);outline-offset:-1.5px}
+.tc .st{font-size:9px;font-family:var(--m);color:var(--ink3);margin-top:auto;
+  padding-top:9px;border-top:1px solid var(--line2)}
+
+/* 主视觉 */
+.hero{display:flex;gap:34px;align-items:stretch}
+.stage{width:330px;height:330px;flex:0 0 330px;background:var(--card);border-radius:16px;
+  display:flex;align-items:center;justify-content:center;position:relative;
+  box-shadow:0 3px 14px rgba(18,18,24,.06)}
+.stage .cell{position:absolute;inset:0;border-right:1px dashed #ECECE6;border-bottom:1px dashed #ECECE6;
+  width:50%;height:50%}
+.stage .cap{position:absolute;left:14px;bottom:12px;font-family:var(--m);font-size:9px;color:#B9B9B1}
+.cons{flex:1;background:var(--card);border-radius:16px;padding:22px 24px;
+  box-shadow:0 3px 14px rgba(18,18,24,.06);display:flex;gap:22px}
+.cons .grid{width:250px;flex:0 0 250px}
+.notes{font-size:10.5px;color:var(--ink2);line-height:1.9}
+.notes b{color:var(--ink);font-weight:600;display:block;font-size:11px;margin-bottom:5px}
+.notes b.inl{display:inline;font-size:10.5px;margin:0}
+.notes u{display:block;text-decoration:none;font-family:var(--m);font-size:10px;color:var(--ink3);margin-top:8px}
+
+/* 尺寸 */
+.sizes{display:flex;align-items:flex-end;gap:34px;background:var(--card);border-radius:14px;
+  padding:26px 30px;box-shadow:0 3px 14px rgba(18,18,24,.05)}
+.sz{display:flex;flex-direction:column;align-items:center;gap:9px}
+.sz span{font-family:var(--m);font-size:9px;color:var(--ink3)}
+.sz .box{display:flex;align-items:flex-end;justify-content:center}
+.dark{background:#0D0D0F;border-radius:26px;display:flex;align-items:center;justify-content:center}
+.rev{margin-left:auto;display:flex;gap:18px;align-items:flex-end}
+.rev .sz{gap:8px}
+.rev .tile{width:86px;height:86px;border-radius:20px;display:flex;align-items:center;justify-content:center}
+.t-ink{background:#0D0D0F}
+.t-paper{background:#fff;border:1px solid var(--line)}
+.t-red{background:var(--red)}
+
+/* 应用图标 */
+.apps{display:flex;gap:18px;align-items:flex-end;background:var(--card);border-radius:14px;
+  padding:24px 28px;box-shadow:0 3px 14px rgba(18,18,24,.05)}
+.app{display:flex;flex-direction:column;align-items:center;gap:9px}
+.app span{font-family:var(--m);font-size:9px;color:var(--ink3)}
+.cellx{border:1px solid var(--line2);display:flex;align-items:center;justify-content:center}
+.taskbar{margin-left:auto;width:286px;background:#1B1B1F;border-radius:10px;height:48px;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.tb{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.tb.ghost{background:rgba(255,255,255,.08)}
+.tb.on{background:#0D0D0F;outline:1px solid rgba(255,255,255,.16)}
+
+/* 组合 */
+.lock{display:flex;gap:18px;background:var(--card);border-radius:14px;padding:26px 28px;
+  box-shadow:0 3px 14px rgba(18,18,24,.05);align-items:center}
+.lk{flex:1;display:flex;align-items:center;justify-content:center;gap:12px;
+  border-right:1px solid var(--line2);padding:8px 0}
+.lk:last-child{border-right:none}
+.wm{font-size:19px;font-weight:600;letter-spacing:-.35px}
+.wm em{font-style:normal;font-weight:400;color:var(--ink2)}
+.lk .stack{display:flex;flex-direction:column;align-items:center;gap:8px}
+.lk .stack .wm{font-size:13px}
+
+/* 对照表 */
+.cmp{background:var(--card);border-radius:14px;box-shadow:0 3px 14px rgba(18,18,24,.05);overflow:hidden}
+.cmp .row{display:flex;border-bottom:1px solid var(--line2)}
+.cmp .row:last-child{border-bottom:none}
+.cmp .k{width:112px;flex:0 0 112px;padding:14px 16px;font-size:10px;color:var(--ink3);
+  background:#FBFBF8;letter-spacing:.02em}
+.cmp .v{flex:1;padding:13px 16px;font-size:10.5px;color:var(--ink2);line-height:1.65;
+  border-left:1px solid var(--line2)}
+.cmp .v b{color:var(--ink);font-weight:600}
+.cmp .hd .k,.cmp .hd .v{background:#fff;padding-top:16px;padding-bottom:14px}
+.cmp .hd .v{font-size:11px;color:var(--ink);font-weight:600}
+.cmp .hd .v span{display:block;font-family:var(--m);font-size:9px;color:var(--ink3);font-weight:400;margin-top:3px}
+
+/* 同尺寸实测 */
+.test{display:flex;gap:14px;background:var(--card);border-radius:14px;padding:22px 26px;
+  box-shadow:0 3px 14px rgba(18,18,24,.05)}
+.tg{flex:1}
+.tg .lab{font-family:var(--m);font-size:9px;color:var(--ink3);margin-bottom:12px}
+.tg .line{display:flex;gap:22px;align-items:flex-end;min-height:44px}
+.tg .line .u{display:flex;flex-direction:column;align-items:center;gap:7px}
+.tg .line .u i{font-family:var(--m);font-size:8.5px;color:#BDBDB5;font-style:normal}
+
+.verdict{display:flex;gap:16px;margin-top:16px}
+.vd{flex:1;background:var(--card);border-radius:14px;padding:18px 20px;
+  box-shadow:0 3px 14px rgba(18,18,24,.05);border-top:2px solid var(--ink)}
+.vd.b{border-top-color:var(--ok)}
+.vd.c{border-top-color:#B98A2E}
+.vd b{font-size:11.5px;display:block}
+.vd p{font-size:10.5px;color:var(--ink2);line-height:1.8;margin-top:7px}
+.foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:30px;
+  padding-top:16px;border-top:1px solid var(--line);font-size:10px;color:var(--ink3)}
+.foot b{color:var(--ink2);font-weight:500}
+</style></head><body>
+
+<div class="head">
+  <div>
+    <div class="eyebrow">IDENTITY · 备选 → B 已落地</div>
+    <h1>另两个方向 <em>— 同一个方块，三种画法</em></h1>
+    <div class="dek">现方案「落仓」是<b>直角实心、无底板、靠一道缝</b>。要真正不同的风格就不能只换形状，得换<b>画法</b>：
+      一个把笔画加粗成实心块（图标语言），一个改用等宽描边（工具语言）。
+      三个案共用同一个语义零件——<b>方块 = 文件</b>。</div>
+  </div>
+  <div class="meta"><b>MediaGrab</b>备选 B / C · 2026-11-17<br>24u 网格 · 单色 · 无渐变</div>
+</div>
+
+<div class="sect">01　三案一览 / AT A GLANCE</div>
+<div class="three">
+  <div class="tc">
+    <div class="mark">
+      <svg width="86" height="86" viewBox="0 0 24 24" fill="none"><path d="M2.8 14.2V21.2H21.2V14.2H18V18.4H6V14.2Z" fill="#15151A"/><rect x="7.2" y="2.8" width="9.6" height="9.6" fill="#15151A"/></svg>
+    </div>
+    <div class="nm">落仓<span>A · 初版</span></div>
+    <div class="tag">直角实心 · 无底板</div>
+    <p>方块悬在开口上方，靠一道 1.8u 的缝说明「还没落进去」。最克制，也最不像下载器。</p>
+    <div class="st">16px △ 需补偿（盘口 22.8）</div>
+  </div>
+
+  <div class="tc now">
+    <div class="mark">
+      <svg width="86" height="86" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg>
+    </div>
+    <div class="nm">厚托<span>B · 已采用</span></div>
+    <div class="tag">粗壁实心 · 圆角</div>
+    <p>同一个构图，壁厚从 3.2u 加到 5.2u，方块加宽到 10.4u。从「图」变成「物」，小尺寸和暗底都更结实。</p>
+    <div class="st">16px ✓ 比 A 更清楚</div>
+  </div>
+
+  <div class="tc">
+    <div class="mark">
+      <svg width="86" height="86" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#15151A"/></svg>
+    </div>
+    <div class="nm">夹<span>C</span></div>
+    <div class="tag">等宽描边 · 左右对称</div>
+    <p>两道圆头竖线从左右收进来，方块卡在中间。三案里唯一左右完全对称、唯一没有任何封闭轮廓的一案。</p>
+    <div class="st">16px △ 需补偿（描边 3.6）</div>
+  </div>
+</div>
+
+<div class="sect">02　备选 B ·「厚托」/ HEAVY</div>
+<div class="hero">
+  <div class="stage">
+    <div class="cell"></div><div class="cell" style="left:50%"></div>
+    <div class="cell" style="top:50%"></div><div class="cell" style="left:50%;top:50%"></div>
+    <svg width="206" height="206" viewBox="0 0 24 24" fill="none">
+      <path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/>
+    </svg>
+    <div class="cap">B · 24u GRID · WALL 5.2u</div>
+  </div>
+
+  <div class="cons">
+    <div class="grid">
+      <svg width="250" height="250" viewBox="-3.4 -3.4 30.8 30.8" fill="none">
+        <defs>
+          <pattern id="g2" width="2" height="2" patternUnits="userSpaceOnUse">
+            <path d="M2 0H0V2" fill="none" stroke="#EFEFE9" stroke-width="0.08"/>
+          </pattern>
+        </defs>
+        <rect x="-3.4" y="-3.4" width="30.8" height="30.8" fill="url(#g2)"/>
+
+        <path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/>
+
+        <line x1="12" y1="-1.6" x2="12" y2="24.4" stroke="#C0392B" stroke-width="0.06" stroke-dasharray="0.4 0.7"/>
+        <line x1="-1.4" y1="12" x2="24.4" y2="12" stroke="#C0392B" stroke-width="0.06" stroke-dasharray="0.4 0.7"/>
+
+        <!-- 块宽 -->
+        <line x1="6.8" y1="-1.0" x2="17.2" y2="-1.0" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="6.8" y1="-1.45" x2="6.8" y2="-0.55" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="17.2" y1="-1.45" x2="17.2" y2="-0.55" stroke="#C0392B" stroke-width="0.09"/>
+        <text x="12" y="-1.75" font-size="1.1" fill="#C0392B" text-anchor="middle" font-family="Consolas">10.4u 方块</text>
+
+        <!-- 托高 -->
+        <line x1="23.2" y1="14.4" x2="23.2" y2="21.6" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="22.75" y1="14.4" x2="23.65" y2="14.4" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="22.75" y1="21.6" x2="23.65" y2="21.6" stroke="#C0392B" stroke-width="0.09"/>
+        <text x="24.4" y="18.0" font-size="1" fill="#C0392B" text-anchor="middle" font-family="Consolas"
+              transform="rotate(-90 24.4 18.0)">7.2u</text>
+
+        <!-- 托宽 -->
+        <line x1="2.4" y1="23.2" x2="21.6" y2="23.2" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="2.4" y1="22.8" x2="2.4" y2="23.6" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="21.6" y1="22.8" x2="21.6" y2="23.6" stroke="#C0392B" stroke-width="0.09"/>
+        <text x="12" y="25.1" font-size="1.1" fill="#C0392B" text-anchor="middle" font-family="Consolas">19.2u · 缝 1.8u</text>
+      </svg>
+    </div>
+    <div class="notes">
+      <b>几何</b>
+      托 19.2 × 7.2，壁 5.2、底 3.2，外底两角 <b class="inl">R1.6</b>，开口 8.8u；方块 10.4u、R1.8，悬在口上方 1.8u。
+      方块 10.4 比口 8.8 <b class="inl">宽 1.6u</b>——它卡在口上，进不去，这就是「还没落进去」的全部证据。
+      <b style="margin-top:14px">和 A 的差别不在构图，在重量</b>
+      A 的壁 3.2、底 2.8，是细笔画；B 的壁 5.2、底 3.2，接近 1:1 的实心块。同一个图形，
+      从「图」变成「物」。<u>这也是它在 16px 和暗底任务栏里比 A 更清楚的原因</u>
+      <b style="margin-top:14px">试过又否掉的两版</b>
+      实底方块 + 顶部凹槽：读成字母 U；实底 + 横口：在 44px 读成「减号 / 最小化」。
+      负形单形在 24u 里太容易指向别的意思，所以退回双元素。
+    </div>
+  </div>
+</div>
+
+<div class="sect">03　备选 B · 尺寸与用法 / SCALE</div>
+<div class="sizes">
+  <div class="sz"><div class="box"><svg width="128" height="128" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg></div><span>128</span></div>
+  <div class="sz"><div class="box"><svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg></div><span>64</span></div>
+  <div class="sz"><div class="box"><svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg></div><span>48</span></div>
+  <div class="sz"><div class="box"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg></div><span>32</span></div>
+  <div class="sz"><div class="box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg></div><span>24</span></div>
+  <div class="sz"><div class="box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg></div><span>20</span></div>
+  <div class="sz"><div class="box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg></div><span>16</span></div>
+
+  <div class="rev">
+    <div class="sz"><div class="tile t-ink"><svg width="52" height="52" viewBox="0 0 24 24" fill="none"><path fill="#fff" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#fff"/></svg></div><span>深底反白</span></div>
+    <div class="sz"><div class="tile t-paper"><svg width="52" height="52" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg></div><span>浅底正形</span></div>
+    <div class="sz"><div class="tile t-red"><svg width="52" height="52" viewBox="0 0 24 24" fill="none"><path fill="#fff" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#fff"/></svg></div><span>强调色</span></div>
+  </div>
+</div>
+
+<div class="sect">04　备选 B · 应用图标 / APP ICON（实心块在暗底不掉分量）</div>
+<div class="apps">
+  <div class="app">
+    <div class="cellx" style="width:168px;height:168px;border-radius:39px">
+      <svg width="112" height="112" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg>
+    </div><span>168 · 桌面</span>
+  </div>
+  <div class="app">
+    <div class="cellx" style="width:96px;height:96px;border-radius:22px">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg>
+    </div><span>96</span>
+  </div>
+  <div class="app">
+    <div class="cellx" style="width:64px;height:64px;border-radius:15px">
+      <svg width="43" height="43" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg>
+    </div><span>64</span>
+  </div>
+  <div class="app">
+    <div class="cellx" style="width:44px;height:44px;border-radius:10px">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg>
+    </div><span>44</span>
+  </div>
+  <div class="app">
+    <div class="dark" style="width:96px;height:96px;border-radius:22px">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path fill="#fff" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#fff"/></svg>
+    </div><span>96 · 深色</span>
+  </div>
+
+  <div class="taskbar">
+    <div class="tb ghost"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" fill="#7E7E85"/><rect x="14" y="3" width="7" height="7" fill="#7E7E85"/><rect x="3" y="14" width="7" height="7" fill="#7E7E85"/><rect x="14" y="14" width="7" height="7" fill="#7E7E85"/></svg></div>
+    <div class="tb on"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path fill="#fff" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#fff"/></svg></div>
+    <div class="tb ghost"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#7E7E85" stroke-width="2"/></svg></div>
+    <div class="tb ghost"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="14" stroke="#7E7E85" stroke-width="2"/></svg></div>
+  </div>
+</div>
+
+<div class="sect">05　备选 B · 组合 / LOCKUP</div>
+<div class="lock">
+  <div class="lk">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg>
+    <div class="wm">Media<em>Grab</em></div>
+  </div>
+  <div class="lk">
+    <div class="stack">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg>
+      <div class="wm">Media<em>Grab</em></div>
+    </div>
+  </div>
+  <div class="lk" style="background:#0D0D0F;border-radius:10px;margin:0 6px;border-right:none">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path fill="#fff" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#fff"/></svg>
+    <div class="wm" style="color:#fff">Media<em style="color:#8E8E96">Grab</em></div>
+  </div>
+</div>
+
+<div class="sect">06　备选 C ·「夹」/ CLAMP</div>
+<div class="hero">
+  <div class="stage">
+    <div class="cell"></div><div class="cell" style="left:50%"></div>
+    <div class="cell" style="top:50%"></div><div class="cell" style="left:50%;top:50%"></div>
+    <svg width="206" height="206" viewBox="0 0 24 24" fill="none">
+      <path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/>
+      <rect x="8" y="8" width="8" height="8" fill="#15151A"/>
+    </svg>
+    <div class="cap">C · 24u GRID · STROKE 3.2u</div>
+  </div>
+
+  <div class="cons">
+    <div class="grid">
+      <svg width="250" height="250" viewBox="-3.4 -3.4 30.8 30.8" fill="none">
+        <defs>
+          <pattern id="g3" width="2" height="2" patternUnits="userSpaceOnUse">
+            <path d="M2 0H0V2" fill="none" stroke="#EFEFE9" stroke-width="0.08"/>
+          </pattern>
+        </defs>
+        <rect x="-3.4" y="-3.4" width="30.8" height="30.8" fill="url(#g3)"/>
+
+        <path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/>
+        <rect x="8" y="8" width="8" height="8" fill="#15151A"/>
+
+        <line x1="12" y1="-1.4" x2="12" y2="24.4" stroke="#C0392B" stroke-width="0.06" stroke-dasharray="0.4 0.7"/>
+        <line x1="-1.2" y1="12" x2="24.4" y2="12" stroke="#C0392B" stroke-width="0.06" stroke-dasharray="0.4 0.7"/>
+
+        <!-- 描边宽 -->
+        <line x1="2.9" y1="-1.2" x2="6.1" y2="-1.2" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="2.9" y1="-1.55" x2="2.9" y2="-0.85" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="6.1" y1="-1.55" x2="6.1" y2="-0.85" stroke="#C0392B" stroke-width="0.09"/>
+        <text x="4.5" y="-1.8" font-size="1.05" fill="#C0392B" text-anchor="middle" font-family="Consolas">3.2u</text>
+
+        <!-- 缝隙 -->
+        <line x1="6.1" y1="11.4" x2="8" y2="11.4" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="6.15" y1="11.0" x2="6.15" y2="11.9" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="7.95" y1="11.0" x2="7.95" y2="11.9" stroke="#C0392B" stroke-width="0.09"/>
+        <text x="7.05" y="12.9" font-size="1" fill="#C0392B" text-anchor="middle" font-family="Consolas">1.9</text>
+
+        <!-- 方块 -->
+        <line x1="8" y1="6.4" x2="16" y2="6.4" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="8" y1="5.95" x2="8" y2="6.85" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="16" y1="5.95" x2="16" y2="6.85" stroke="#C0392B" stroke-width="0.09"/>
+        <text x="12" y="5.8" font-size="1.05" fill="#C0392B" text-anchor="middle" font-family="Consolas">8.0u</text>
+
+        <!-- 竖条长 -->
+        <line x1="23.6" y1="5.3" x2="23.6" y2="19.6" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="23.2" y1="5.3" x2="24.0" y2="5.3" stroke="#C0392B" stroke-width="0.09"/>
+        <line x1="23.2" y1="19.6" x2="24.0" y2="19.6" stroke="#C0392B" stroke-width="0.09"/>
+        <text x="25.0" y="12.4" font-size="1.05" fill="#C0392B" text-anchor="middle" font-family="Consolas"
+              transform="rotate(-90 25.0 12.4)">14.4u</text>
+
+        <!-- 对称轴 -->
+        <text x="12" y="25.4" font-size="1" fill="#C0392B" text-anchor="middle" font-family="Consolas">左右 · 上下 · 旋转 180° 三重对称</text>
+      </svg>
+    </div>
+    <div class="notes">
+      <b>几何</b>
+      描边 3.2u、圆头端点。两条竖条占 3.2×14.4，中心线在 4.5 与 19.5，四边各留 2.9u。
+      方块 8.0u 居中，两边各留 1.9u 的缝——这道缝是全部意义所在，缝没了就变成一根实心横杠。
+      <b style="margin-top:14px">它是唯一三重对称的一案</b>
+      左右镜像、上下镜像、旋转 180° 都完全重合。好处是任何方向都不倒；代价是没有「落」的方向感，
+      它描述的是<b class="inl">状态</b>（被夹住），不是<b class="inl">动作</b>。<u>16px 时缝只剩 1.3 像素，必须出补偿版</u>
+    </div>
+  </div>
+</div>
+
+<div class="sect">07　备选 C · 尺寸阶梯 / SIZE LADDER（16px 为补偿版：描边 3.6、方块 8.8）</div>
+<div class="sizes">
+  <div class="sz"><div class="box"><svg width="128" height="128" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#15151A"/></svg></div><span>128</span></div>
+  <div class="sz"><div class="box"><svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#15151A"/></svg></div><span>64</span></div>
+  <div class="sz"><div class="box"><svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#15151A"/></svg></div><span>48</span></div>
+  <div class="sz"><div class="box"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#15151A"/></svg></div><span>32</span></div>
+  <div class="sz"><div class="box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#15151A"/></svg></div><span>24</span></div>
+  <div class="sz"><div class="box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.4 5.4V18.6" stroke="#15151A" stroke-width="3.6" stroke-linecap="round"/><path d="M19.6 5.4V18.6" stroke="#15151A" stroke-width="3.6" stroke-linecap="round"/><rect x="7.6" y="7.6" width="8.8" height="8.8" fill="#15151A"/></svg></div><span>20 *</span></div>
+  <div class="sz"><div class="box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4.4 5.4V18.6" stroke="#15151A" stroke-width="3.6" stroke-linecap="round"/><path d="M19.6 5.4V18.6" stroke="#15151A" stroke-width="3.6" stroke-linecap="round"/><rect x="7.6" y="7.6" width="8.8" height="8.8" fill="#15151A"/></svg></div><span>16 *</span></div>
+
+  <div class="rev">
+    <div class="sz"><div class="tile t-ink"><svg width="52" height="52" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#fff"/></svg></div><span>深底反白</span></div>
+    <div class="sz"><div class="tile t-paper"><svg width="52" height="52" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#15151A"/></svg></div><span>浅底正形</span></div>
+    <div class="sz"><div class="tile t-red"><svg width="52" height="52" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#fff"/></svg></div><span>强调色</span></div>
+  </div>
+</div>
+
+<div class="sect">08　三案同尺寸实测 / 16 → 64</div>
+<div class="test">
+  <div class="tg">
+    <div class="lab">A · 落仓</div>
+    <div class="line">
+      <div class="u"><svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M2.8 14.2V21.2H21.2V14.2H18V18.4H6V14.2Z" fill="#15151A"/><rect x="7.2" y="2.8" width="9.6" height="9.6" fill="#15151A"/></svg><i>64</i></div>
+      <div class="u"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M2.8 14.2V21.2H21.2V14.2H18V18.4H6V14.2Z" fill="#15151A"/><rect x="7.2" y="2.8" width="9.6" height="9.6" fill="#15151A"/></svg><i>32</i></div>
+      <div class="u"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M2.8 14.2V21.2H21.2V14.2H18V18.4H6V14.2Z" fill="#15151A"/><rect x="7.2" y="2.8" width="9.6" height="9.6" fill="#15151A"/></svg><i>24</i></div>
+      <div class="u"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M1.2 14.8V22.8H22.8V14.8H18.6V19.4H5.4V14.8Z" fill="#15151A"/><rect x="6.4" y="1.2" width="11.2" height="11.2" fill="#15151A"/></svg><i>16</i></div>
+    </div>
+  </div>
+  <div class="tg">
+    <div class="lab">B · 厚托</div>
+    <div class="line">
+      <div class="u"><svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg><i>64</i></div>
+      <div class="u"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg><i>32</i></div>
+      <div class="u"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg><i>24</i></div>
+      <div class="u"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill="#15151A" d="M4.0 14.4H7.6V18.4H16.4V14.4H20.0A1.6 1.6 0 0 1 21.6 16.0V20.0A1.6 1.6 0 0 1 20.0 21.6H4.0A1.6 1.6 0 0 1 2.4 20.0V16.0A1.6 1.6 0 0 1 4.0 14.4Z"/><rect x="6.8" y="2.2" width="10.4" height="10.4" rx="1.8" fill="#15151A"/></svg><i>16</i></div>
+    </div>
+  </div>
+  <div class="tg">
+    <div class="lab">C · 夹</div>
+    <div class="line">
+      <div class="u"><svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#15151A"/></svg><i>64</i></div>
+      <div class="u"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#15151A"/></svg><i>32</i></div>
+      <div class="u"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><path d="M19.5 5.6V18.4" stroke="#15151A" stroke-width="3.2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" fill="#15151A"/></svg><i>24</i></div>
+      <div class="u"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4.4 5.4V18.6" stroke="#15151A" stroke-width="3.6" stroke-linecap="round"/><path d="M19.6 5.4V18.6" stroke="#15151A" stroke-width="3.6" stroke-linecap="round"/><rect x="7.6" y="7.6" width="8.8" height="8.8" fill="#15151A"/></svg><i>16</i></div>
+    </div>
+  </div>
+</div>
+
+<div class="sect">09　取舍 / TRADE-OFF</div>
+<div class="cmp">
+  <div class="row hd">
+    <div class="k"></div>
+    <div class="v">A · 落仓<span>直角实心 · 无底板</span></div>
+    <div class="v">B · 厚托<span>粗壁实心 · 圆角</span></div>
+    <div class="v">C · 夹<span>等宽描边 · 圆头</span></div>
+  </div>
+  <div class="row">
+    <div class="k">一句话语义</div>
+    <div class="v">内容悬在容器口上，<b>将要落进去</b>。</div>
+    <div class="v">还是方块 + 托，但托变厚、块变宽：<b>从图变成物</b>。</div>
+    <div class="v">两侧收拢，<b>夹住</b>中间那一块。</div>
+  </div>
+  <div class="row">
+    <div class="k">16px</div>
+    <div class="v">需补偿（盘口 22.8、方块 11.2）</div>
+    <div class="v"><b>不用补偿</b>，比 A 还稳（壁厚是 A 的 1.6 倍）</div>
+    <div class="v">需补偿（描边 3.6、方块 8.8）</div>
+  </div>
+  <div class="row">
+    <div class="k">桌面 / 商店</div>
+    <div class="v">透明底会显「瘪」，得另加底板</div>
+    <div class="v"><b>最结实</b>，暗底不掉分量</div>
+    <div class="v">透明底偏轻，加底板后描边被压边发灰</div>
+  </div>
+  <div class="row">
+    <div class="k">同类区隔</div>
+    <div class="v"><b>最强</b>。全品类没有第二家画容器</div>
+    <div class="v">弱。本质是 A 的加粗版，不提供新记忆点</div>
+    <div class="v">中上。纯线条在下载器里少见，但会被读成「括号 / 停止」</div>
+  </div>
+  <div class="row">
+    <div class="k">动效潜力</div>
+    <div class="v">方块下坠 → 落底，最直白</div>
+    <div class="v">方块下坠 → 托回弹，手感最好</div>
+    <div class="v">两条竖线向内挤压 → 夹紧，节奏最快</div>
+  </div>
+  <div class="row">
+    <div class="k">风险</div>
+    <div class="v">太素，第一眼读不出「下载」</div>
+    <div class="v">和 A 太像，会被问「这不是同一个吗」</div>
+    <div class="v">三块等重，缺少主次；语义停在「夹」不到「下载」</div>
+  </div>
+</div>
+
+<div class="verdict">
+  <div class="vd b">
+    <b>B 是给暗底和小尺寸准备的</b>
+    <p>壁厚是 A 的 1.6 倍，16px 和任务栏里都更清楚，也更好画动效。代价是它几乎就是 A 的加粗版，
+      不提供新的记忆点——如果只想要“同一个标识更结实”，选它；想要换方向，选 C。</p>
+  </div>
+  <div class="vd">
+    <b>A 仍是最该保留的主形</b>
+    <p>B 和 C 都在“像不像下载器”上更安全，但也都更接近品类套路。A 的区隔度最高，
+      代价是要在文案与引导里把语义补回来。</p>
+  </div>
+  <div class="vd c">
+    <b>C 只建议做辅助图形</b>
+    <p>三重对称、圆头线条，很上镜，也适合空状态与加载动效。作为主标识，
+      16px 的补偿和“括号 / 停止”的误读都过不了关。</p>
+  </div>
+</div>
+
+<div class="foot">
+  <div><b>MediaGrab · 备选 B 厚托 / C 夹</b>　单色 / 无渐变 / 24u 网格 / 共用「方块 = 文件」</div>
+  <div>2026-11-17　与 A 案同页对照</div>
+</div>
+
+</body></html>

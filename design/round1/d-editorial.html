@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>MediaGrab · Editorial</title>
+<style>
+  /* ============ Design Tokens · Editorial（自创方案） ============
+     思路：把下载工具做成一份刊物。
+     - 用「线」而不是「面」划分区域，几乎不用圆角与阴影
+     - 极大的字号对比：26px 衬线主标题 vs 10px 宽字距大写小标签
+     - 编号系统（01 / 02 / 03）承担秩序感
+     =============================================================== */
+  :root{
+    --ink:#17160F;
+    --surface:#1E1D15;
+    --surface-2:#242219;
+    --line:rgba(240,232,214,.13);
+    --line-strong:rgba(240,232,214,.26);
+    --text:#F2EBDC;
+    --muted:#A49D8B;
+    --dim:#6B6659;
+    --accent:#E0A458;
+    --accent-ink:#1A1509;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    /* 中文衬线优先：Windows 上 SimSun 在 26px 以上不会发虚 */
+    font-family:"Georgia","Songti SC","SimSun","Microsoft YaHei UI","Segoe UI Emoji",serif;
+    font-size:14px;color:var(--text);
+    background:#0C0B07;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  .ui{font-family:"Segoe UI Variable Text","Segoe UI","Microsoft YaHei UI","PingFang SC","Segoe UI Emoji",sans-serif}
+
+  .page{
+    position:relative;
+    width:1200px;height:800px;
+    background:var(--ink);
+    /* 纸面的细微纹理，避免大面积纯色发死 */
+    background-image:
+      radial-gradient(620px 380px at 86% 4%, rgba(224,164,88,.055), transparent 62%),
+      radial-gradient(520px 420px at 4% 96%, rgba(224,164,88,.035), transparent 60%);
+    box-shadow:0 34px 80px rgba(0,0,0,.62);
+    display:flex;flex-direction:column;
+    padding:0;
+  }
+
+  /* ---------- 页眉 ---------- */
+  .masthead{
+    height:66px;flex:0 0 66px;
+    display:flex;align-items:center;
+    padding:0 40px;
+    border-bottom:1px solid var(--line-strong);
+  }
+  .brand{
+    font-family:"Georgia","SimSun",serif;
+    font-size:19px;letter-spacing:.06em;
+    margin-right:16px;
+  }
+  .brand i{color:var(--accent);font-style:normal}
+  .issue{
+    font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--dim);
+    border-left:1px solid var(--line-strong);padding-left:16px;
+  }
+  .mast-right{margin-left:auto;display:flex;align-items:center;gap:26px}
+  .meter{display:flex;align-items:center;gap:10px}
+  .meter .lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  .meter .val{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .meter .rule{width:74px;height:1px;background:var(--line-strong);position:relative}
+  .meter .rule::after{content:"";position:absolute;left:0;top:-1px;height:3px;width:62%;background:var(--accent)}
+
+  /* ---------- 主体 ---------- */
+  .sheet{flex:1;min-height:0;display:flex;padding:0 40px;gap:38px;overflow:hidden}
+
+  .col-main{flex:1;min-width:0;display:flex;flex-direction:column;padding-top:26px}
+  .col-side{
+    width:238px;flex:0 0 238px;
+    border-left:1px solid var(--line);
+    padding:26px 0 0 30px;
+    display:flex;flex-direction:column;
+  }
+
+  /* 章节标题 */
+  .kicker{
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);
+    margin-bottom:12px;
+  }
+  h1.headline{
+    font-family:"Georgia","Songti SC","SimSun",serif;
+    font-size:34px;font-weight:400;line-height:1.22;letter-spacing:.01em;
+    margin-bottom:6px;
+  }
+  .dek{font-size:12.5px;color:var(--muted);line-height:1.6;max-width:430px}
+
+  /* 输入条：只用下划线 */
+  .paste{
+    margin-top:24px;
+    display:flex;align-items:flex-end;gap:18px;
+    border-bottom:1px solid var(--line-strong);
+    padding-bottom:10px;
+  }
+  .paste .field{flex:1;min-width:0;display:flex;align-items:center;gap:11px}
+  .paste .field .idx{
+    font-size:10px;letter-spacing:.14em;color:var(--dim);
+  }
+  .paste .field .val{
+    flex:1;font-size:15px;color:var(--text);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    font-family:"Segoe UI Variable Text","Segoe UI","Microsoft YaHei UI",sans-serif;
+  }
+  .paste .field .val em{color:var(--dim);font-style:normal}
+  .paste .src{
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    padding-bottom:2px;
+  }
+  .go{
+    height:36px;padding:0 24px;border:0;border-radius:2px;
+    background:var(--accent);color:var(--accent-ink);
+    font-family:"Segoe UI Variable Text","Segoe UI","Microsoft YaHei UI",sans-serif;
+    font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    white-space:nowrap;flex:0 0 auto;cursor:pointer;
+  }
+
+  /* ---------- 主条目 ---------- */
+  .entry{margin-top:28px;display:flex;gap:24px;align-items:flex-start}
+  .plate{
+    width:176px;height:220px;flex:0 0 auto;overflow:hidden;
+    background:var(--surface);position:relative;
+    border:1px solid var(--line);
+  }
+  .plate img{width:100%;height:100%;object-fit:cover;display:block;opacity:.94}
+  .plate .plate-no{
+    position:absolute;left:0;bottom:0;
+    background:var(--accent);color:var(--accent-ink);
+    font-family:"Segoe UI",sans-serif;
+    font-size:10px;font-weight:700;letter-spacing:.1em;
+    padding:3px 8px;
+    font-variant-numeric:tabular-nums;
+  }
+
+  .txt{flex:1;min-width:0;display:flex;flex-direction:column}
+  .txt .eyebrow{
+    display:flex;align-items:center;gap:10px;
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+    margin-bottom:10px;
+  }
+  .txt .eyebrow b{color:var(--accent);font-weight:600}
+  .txt h2{
+    font-family:"Georgia","Songti SC","SimSun",serif;
+    font-size:21px;font-weight:400;line-height:1.38;letter-spacing:.005em;
+    max-height:2.76em;overflow:hidden;word-break:break-word;
+    margin-bottom:12px;
+  }
+  .byline{
+    display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+    font-size:11.5px;color:var(--muted);
+    padding-bottom:14px;border-bottom:1px solid var(--line);
+    margin-bottom:14px;
+  }
+  .byline .sl{color:var(--dim)}
+
+  /* 图集：像画册目录 */
+  .plates-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+  .plates-head .t{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+  .plates-head .c{font-size:10px;letter-spacing:.14em;color:var(--accent);font-variant-numeric:tabular-nums}
+  .plates{display:flex;gap:12px}
+  .pl{width:84px;flex:0 0 auto}
+  .pl .frame{
+    width:84px;height:104px;overflow:hidden;position:relative;
+    border:1px solid var(--line);background:var(--surface);
+  }
+  .pl .frame img{width:100%;height:100%;object-fit:cover;display:block}
+  .pl.on .frame{border-color:var(--accent)}
+  .pl.off .frame img{opacity:.32}
+  .pl .cap{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-top:6px;font-size:9.5px;letter-spacing:.1em;color:var(--dim);
+    font-family:"Segoe UI",sans-serif;font-variant-numeric:tabular-nums;
+  }
+  .pl.on .cap{color:var(--accent)}
+  .pl .cap .tick{font-size:9px}
+
+  .actions{
+    margin-top:auto;padding:20px 0 24px;
+    display:flex;align-items:center;gap:16px;
+  }
+  .actions .note{font-size:11px;color:var(--dim);flex:1;line-height:1.55}
+  .actions .note b{color:var(--muted);font-weight:400}
+  .ghost{
+    height:36px;padding:0 18px;border:1px solid var(--line-strong);border-radius:2px;
+    background:transparent;color:var(--text);
+    font-family:"Segoe UI Variable Text","Segoe UI","Microsoft YaHei UI",sans-serif;
+    font-size:12px;letter-spacing:.06em;white-space:nowrap;flex:0 0 auto;
+  }
+  .solid{
+    height:36px;padding:0 22px;border:0;border-radius:2px;
+    background:var(--accent);color:var(--accent-ink);
+    font-family:"Segoe UI Variable Text","Segoe UI","Microsoft YaHei UI",sans-serif;
+    font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    white-space:nowrap;flex:0 0 auto;
+  }
+
+  /* ---------- 右栏：目录 ---------- */
+  .side-h{
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);
+    padding-bottom:12px;border-bottom:1px solid var(--line-strong);
+    display:flex;justify-content:space-between;
+  }
+  .toc{margin-top:4px}
+  .toc-item{
+    padding:13px 0;border-bottom:1px solid var(--line);
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .toc-item .no{
+    font-size:10px;color:var(--dim);letter-spacing:.08em;
+    font-family:"Segoe UI",sans-serif;padding-top:2px;font-variant-numeric:tabular-nums;
+  }
+  .toc-item .bd{flex:1;min-width:0}
+  .toc-item .ti{
+    font-size:12.5px;line-height:1.5;color:var(--text);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    padding-right:12px;
+    font-family:"Segoe UI Variable Text","Segoe UI","Microsoft YaHei UI",sans-serif;
+  }
+  .toc-item .tm{
+    margin-top:4px;font-size:10px;letter-spacing:.1em;color:var(--dim);
+    display:flex;gap:8px;align-items:center;text-transform:uppercase;
+  }
+  .toc-item .tm b{color:var(--accent);font-weight:600}
+  .toc-item.dim .ti{color:var(--muted)}
+
+  .side-foot{margin-top:auto;padding:16px 0 24px;border-top:1px solid var(--line-strong)}
+  .stat{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);padding:5px 0}
+  .stat b{color:var(--text);font-weight:400;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 页眉 -->
+  <div class="masthead">
+    <div class="brand">Media<i>Grab</i></div>
+    <div class="issue">Issue 04 · 2026</div>
+    <div class="mast-right">
+      <div class="meter">
+        <span class="lbl">Queue</span>
+        <div class="rule"></div>
+        <span class="val">2 / 3</span>
+      </div>
+      <div class="meter"><span class="lbl">Saved</span><span class="val">1.28 GB</span></div>
+    </div>
+  </div>
+
+  <div class="sheet">
+    <!-- 主栏 -->
+    <div class="col-main">
+      <div class="kicker">Archive · No. 12</div>
+      <h1 class="headline">把喜欢的东西<br>留下来。</h1>
+      <div class="dek">粘贴一条分享链接，选出你要的清晰度或第几张图。原文案、原图、原分辨率，不做二次压缩。</div>
+
+      <!-- 输入 -->
+      <div class="paste">
+        <div class="field">
+          <span class="idx">01</span>
+          <div class="val"><em>https://</em>v.douyin.com/dcJJwUpngMI/</div>
+          <span class="src">Douyin</span>
+        </div>
+        <button class="go">Parse</button>
+      </div>
+
+      <!-- 主条目 -->
+      <div class="entry">
+        <div class="plate">
+          <img src="assets/photo1.jpg" alt="">
+          <div class="plate-no">FIG. 01</div>
+        </div>
+
+        <div class="txt">
+          <div class="eyebrow"><b>Douyin</b><span class="sl">/</span>Photo set<span class="sl">/</span>2160 × 3024</div>
+          <h2>就算变成小僵尸，也还是想唱歌🎶。📷：自己 出镜：鲨鲨 #cos #摄影 #初音未来 #二次元 #cosplay</h2>
+          <div class="byline">
+            <span>宗圆kzy.</span><span class="sl">—</span>
+            <span>2026.10.28</span><span class="sl">—</span>
+            <span>3 plates</span><span class="sl">—</span>
+            <span>no watermark</span>
+          </div>
+
+          <div class="plates-head">
+            <div class="t">Plates</div>
+            <div class="c">03 / 03 SELECTED</div>
+          </div>
+          <div class="plates">
+            <div class="pl on">
+              <div class="frame"><img src="assets/photo1.jpg" alt=""></div>
+              <div class="cap"><span>01</span><span class="tick">●</span></div>
+            </div>
+            <div class="pl on">
+              <div class="frame"><img src="assets/photo2.jpg" alt=""></div>
+              <div class="cap"><span>02</span><span class="tick">●</span></div>
+            </div>
+            <div class="pl on">
+              <div class="frame"><img src="assets/photo3.jpg" alt=""></div>
+              <div class="cap"><span>03</span><span class="tick">●</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 操作 -->
+      <div class="actions">
+        <div class="note">存入 <b>Downloads / MediaGrab</b><br>原图不做压缩，WebP 自动转 JPG</div>
+        <button class="ghost">全选</button>
+        <button class="solid">Download</button>
+      </div>
+    </div>
+
+    <!-- 右栏目录 -->
+    <div class="col-side">
+      <div class="side-h"><span>Contents</span><span>07</span></div>
+      <div class="toc">
+        <div class="toc-item">
+          <div class="no">02</div>
+          <div class="bd">
+            <div class="ti">我这样的人 我什么样 我又这样 我又哪样</div>
+            <div class="tm"><b>Video</b><span>00:11</span><span>1080P</span></div>
+          </div>
+        </div>
+        <div class="toc-item">
+          <div class="no">03</div>
+          <div class="bd">
+            <div class="ti">反诈博主"徽剑"被曝 2 年前遭买凶遇害</div>
+            <div class="tm"><b>Video</b><span>57:14</span><span>1080P</span></div>
+          </div>
+        </div>
+        <div class="toc-item dim">
+          <div class="no">04</div>
+          <div class="bd">
+            <div class="ti">🍈～ #cos #橘望</div>
+            <div class="tm"><span>Photo</span><span>4 plates</span></div>
+          </div>
+        </div>
+        <div class="toc-item dim">
+          <div class="no">05</div>
+          <div class="bd">
+            <div class="ti">1999 年邱淑贞和老公复古结婚照</div>
+            <div class="tm"><span>Photo</span><span>2 plates</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-foot">
+        <div class="stat"><span>Formats</span><b>3</b></div>
+        <div class="stat"><span>Total size</span><b>1.28 GB</b></div>
+        <div class="stat"><span>Engine</span><b>yt-dlp + ffmpeg</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

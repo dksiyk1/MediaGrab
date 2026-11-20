@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>MediaGrab · 四套 UI 方案对比</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Segoe UI Variable Text","Segoe UI","Microsoft YaHei UI","Segoe UI Emoji",sans-serif;
+    background:#0E0F12;color:#EDEEF1;
+    padding:36px 40px 40px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .head{display:flex;align-items:flex-end;gap:20px;margin-bottom:26px}
+  .head h1{font-size:22px;font-weight:600;letter-spacing:.01em}
+  .head p{font-size:12.5px;color:#8A8F98;line-height:1.6;white-space:nowrap}
+  .head .tag{
+    margin-left:auto;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:#8A8F98;border:1px solid #2A2D34;border-radius:4px;padding:5px 10px;
+  }
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .item{}
+  .shot{
+    border-radius:10px;overflow:hidden;
+    box-shadow:0 14px 38px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07);
+    background:#000;
+  }
+  .shot img{width:100%;display:block}
+  .cap{display:flex;align-items:baseline;gap:10px;margin-top:11px}
+  .cap .n{
+    font-size:10px;font-weight:700;letter-spacing:.1em;color:#0E0F12;
+    background:#EDEEF1;border-radius:3px;padding:2px 6px;
+  }
+  .cap .t{font-size:14px;font-weight:600}
+  .cap .d{font-size:11.5px;color:#8A8F98;margin-left:auto;text-align:right}
+  .note{font-size:11.5px;color:#7B8088;line-height:1.65;margin-top:6px}
+  .note b{color:#C6CAD1;font-weight:500}
+</style>
+</head>
+<body>
+  <div class="head">
+    <h1>MediaGrab 界面方案 · 四选一</h1>
+    <p>同一套信息架构，只换视觉语言，方便横向比较。</p>
+    <div class="tag">1200 × 800 @2x</div>
+  </div>
+
+  <div class="grid">
+    <div class="item">
+      <div class="shot"><img src="shots/01-windows-fluent.png" alt=""></div>
+      <div class="cap"><span class="n">A</span><span class="t">Windows 11 Fluent</span><span class="d">Mica 材质 · Segoe UI</span></div>
+      <div class="note">系统原生感最强。4px 控件圆角、左侧图标导航、状态栏贴底。<b>零学习成本</b>，但辨识度最低。</div>
+    </div>
+
+    <div class="item">
+      <div class="shot"><img src="shots/02-macos-tahoe.png" alt=""></div>
+      <div class="cap"><span class="n">B</span><span class="t">macOS Tahoe</span><span class="d">Vibrancy · 交通灯</span></div>
+      <div class="note">侧边栏 + 内容区，半透明白透出壁纸。最细腻、最安静，<b>适合长时间使用</b>；导入条已改为全宽一级操作区。</div>
+    </div>
+
+    <div class="item">
+      <div class="shot"><img src="shots/03-material-you.png" alt=""></div>
+      <div class="cap"><span class="n">C</span><span class="t">Material 3</span><span class="d">动态取色 · 大圆角</span></div>
+      <div class="note">24px 大圆角、药丸按钮、chips、底部导航、FAB。元素最丰富，<b>触屏和鼠标都顺手</b>；信息密度略低于 A。</div>
+    </div>
+
+    <div class="item">
+      <div class="shot"><img src="shots/04-editorial.png" alt=""></div>
+      <div class="cap"><span class="n">D</span><span class="t">Editorial（自创）</span><span class="d">刊物排版 · 琥珀强调</span></div>
+      <div class="note">用线不用面，方角、衬线大标题、编号系统（FIG. / PLATES / CONTENTS）。<b>辨识度最高</b>，适合做成有主张的产品；信息密度最高，但需要一屏适应。</div>
+    </div>
+  </div>
+</body>
+</html>

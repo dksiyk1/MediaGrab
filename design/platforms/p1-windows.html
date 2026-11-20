@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><style>
+/* Windows 11 / WinUI 3 (Fluent) */
+:root{
+  --accent:#0067C0; --accent-hover:#1975C5; --accent-press:#318CCF;
+  --text:#1B1B1B; --text2:#5F5F5F; --text3:#8A8A8A;
+  --stroke:rgba(0,0,0,.0578); --stroke-strong:rgba(0,0,0,.16);
+  --fill-subtle:rgba(0,0,0,.0373); --fill-card:rgba(255,255,255,.85);
+  --font:"Segoe UI Variable Text","Segoe UI","Microsoft YaHei UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1180px;height:760px;overflow:hidden;font-family:var(--font);
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(ellipse 60% 80% at 12% 10%,#4A6A96 0%,transparent 62%),
+    radial-gradient(ellipse 70% 90% at 88% 88%,#54637A 0%,transparent 62%),
+    radial-gradient(ellipse 50% 60% at 78% 12%,#3B7396 0%,transparent 58%),
+    linear-gradient(135deg,#1A2531,#23303F 45%,#2A333C)}
+.win{width:1180px;height:760px;display:flex;flex-direction:column;
+  background:rgba(243,243,243,.82);backdrop-filter:blur(80px) saturate(150%);
+  -webkit-backdrop-filter:blur(80px) saturate(150%);
+  border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 32px 80px rgba(0,0,0,.42),0 2px 6px rgba(0,0,0,.2)}
+/* title bar 48 */
+.tbar{height:48px;flex:0 0 48px;display:flex;align-items:center;padding-left:16px;gap:9px}
+.tbar .t{font-size:12px;color:var(--text);letter-spacing:.01em}
+.tbar .cap{margin-left:auto;display:flex;align-self:stretch}
+.cap b{width:46px;display:flex;align-items:center;justify-content:center;color:#1B1B1B}
+.cap b:hover{background:rgba(0,0,0,.05)}
+/* body */
+.body{flex:1;display:flex;min-height:0}
+.nav{width:252px;flex:0 0 252px;padding:4px 8px 8px;display:flex;flex-direction:column}
+.navtop{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;border-radius:4px;
+  margin-bottom:8px}
+.navtop .hamb{width:14px;height:14px;opacity:.7}
+.navtop b{font-size:14px;font-weight:600;color:var(--text)}
+.glabel{font-size:12px;color:var(--text2);padding:14px 12px 6px;font-weight:600}
+.item{height:36px;border-radius:4px;display:flex;align-items:center;gap:12px;padding:0 12px;
+  font-size:14px;color:var(--text);position:relative;margin-bottom:2px}
+.item svg{width:16px;height:16px;flex:0 0 16px;color:#424242}
+.item .n{margin-left:auto;font-size:12px;color:var(--text2)}
+.item.on{background:var(--fill-subtle);font-weight:600}
+.item.on:before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:2px;
+  background:var(--accent)}
+.navfoot{margin-top:auto;padding:10px 4px 2px;border-top:1px solid var(--stroke)}
+.disk{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);padding:2px 8px 8px}
+.pbar-disk{height:3px;border-radius:2px;background:rgba(0,0,0,.09);margin:0 8px 12px}
+.pbar-disk i{display:block;height:100%;width:63%;background:var(--accent);border-radius:2px;opacity:.85}
+.settings{height:36px;border-radius:4px;display:flex;align-items:center;gap:12px;padding:0 12px;
+  font-size:14px;color:var(--text)}
+.settings svg{width:16px;height:16px;color:#424242}
+/* content */
+.content{flex:1;display:flex;flex-direction:column;min-width:0;padding:0 24px 0 4px}
+.head{height:64px;display:flex;align-items:center;gap:12px}
+.head h1{font-size:20px;font-weight:600;color:var(--text);letter-spacing:-.005em}
+.head .cnt{font-size:12px;color:var(--text2)}
+.hright{margin-left:auto;display:flex;align-items:center;gap:8px}
+.search{width:232px;height:32px;border-radius:4px;background:rgba(255,255,255,.7);
+  border:1px solid var(--stroke);border-bottom-color:var(--stroke-strong);
+  display:flex;align-items:center;gap:8px;padding:0 10px;font-size:13px;color:var(--text3)}
+.iconbtn{width:32px;height:32px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+  border:1px solid transparent}
+.iconbtn:hover{background:rgba(0,0,0,.04)}
+/* import */
+.imp{display:flex;gap:8px;margin-bottom:16px}
+.field{flex:1;height:36px;border-radius:4px;background:rgba(255,255,255,.7);
+  border:1px solid var(--stroke);border-bottom:1px solid var(--stroke-strong);
+  display:flex;align-items:center;padding:0 12px;font-size:14px;color:var(--text3);
+  position:relative}
+.field:after{content:"";position:absolute;left:-1px;right:-1px;bottom:-1px;height:2px;
+  background:var(--accent);border-radius:0 0 4px 4px;opacity:0}
+.btn{height:36px;padding:0 20px;border-radius:4px;font-size:14px;display:flex;align-items:center;
+  justify-content:center;gap:6px}
+.btn.primary{background:var(--accent);color:#fff;font-weight:600}
+.btn.standard{background:rgba(255,255,255,.7);color:var(--text);border:1px solid var(--stroke);
+  border-bottom-color:var(--stroke-strong);font-weight:400}
+/* list */
+.list{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.card{background:var(--fill-card);border:1px solid var(--stroke);border-radius:8px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);padding:14px;display:flex;gap:14px;margin-bottom:10px}
+.thumb{width:132px;height:74px;flex:0 0 132px;border-radius:4px;overflow:hidden;position:relative;
+  background:#111}
+.thumb .dur{position:absolute;right:4px;bottom:4px;font-size:11px;color:#fff;
+  background:rgba(0,0,0,.55);border-radius:2px;padding:0 4px;font-variant-numeric:tabular-nums}
+.info{flex:1;min-width:0;display:flex;flex-direction:column}
+.tit{font-size:14px;font-weight:600;color:var(--text);line-height:20px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.meta{margin-top:4px;font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.meta b{font-weight:400}
+.tag{font-size:11px;color:#0F548C;background:#E5F1FB;border-radius:2px;padding:0 5px;line-height:16px}
+.cfoot{margin-top:auto;padding-top:10px;display:flex;align-items:center;gap:10px}
+.lb{font-size:12px;color:var(--text2);margin-right:2px}
+.seg{display:flex;height:30px;padding:2px;border-radius:4px;background:rgba(249,249,249,.6);
+  border:1px solid var(--stroke);gap:2px}
+.seg span{display:flex;align-items:center;padding:0 12px;font-size:12px;color:var(--text);
+  border-radius:3px;border:1px solid transparent}
+.seg span.on{background:#fff;border-color:var(--stroke);box-shadow:0 1px 2px rgba(0,0,0,.08);
+  font-weight:600}
+.rowend{margin-left:auto;display:flex;align-items:center;gap:10px}
+.hint{font-size:11px;color:var(--text3)}
+.btn.sm{height:32px;padding:0 16px;font-size:13px}
+.gal{display:flex;gap:4px;margin-top:8px}
+.gal i{width:30px;height:30px;border-radius:3px;display:block}
+.chk{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text)}
+.chk em{width:16px;height:16px;border-radius:3px;background:var(--accent);display:flex;
+  align-items:center;justify-content:center;font-style:normal}
+/* progress card */
+.live{background:var(--fill-card);border:1px solid var(--stroke);border-radius:8px;padding:12px 14px;
+  margin-top:auto;margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.live .t{flex:1;font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.live .t b{font-weight:600}
+.pb{width:190px;height:4px;border-radius:2px;background:rgba(0,0,0,.09);overflow:hidden}
+.pb i{display:block;height:100%;width:68%;background:var(--accent);border-radius:2px}
+.num{font-size:12px;color:var(--text2);font-variant-numeric:tabular-nums}
+/* status */
+.status{height:32px;flex:0 0 32px;border-top:1px solid var(--stroke);display:flex;align-items:center;
+  gap:10px;font-size:12px;color:var(--text2);padding:0 4px}
+.status .sl{color:var(--text3)}
+.sep{width:1px;height:12px;background:rgba(0,0,0,.12)}
+.link{color:var(--accent);font-size:12px}
+.sw{width:40px;height:20px;border-radius:10px;background:rgba(0,0,0,.28);position:relative}
+.sw i{position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:50%;background:#fff}
+.sw.on{background:var(--accent)}
+.sw.on i{left:23px}
+</style></head><body>
+<div class="win">
+  <div class="tbar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2"
+            stroke="#0067C0" stroke-width="1.8"/>
+      <rect x="9.4" y="9.4" width="5.2" height="5.2" fill="#0067C0"/>
+    </svg>
+    <span class="t">MediaGrab</span>
+    <div class="cap">
+      <b><svg width="10" height="10" viewBox="0 0 10 10"><rect x="0" y="4.5" width="10" height="1" fill="currentColor"/></svg></b>
+      <b><svg width="10" height="10" viewBox="0 0 10 10"><rect x="0.5" y="0.5" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1"/></svg></b>
+      <b><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 0l10 10M10 0L0 10" stroke="currentColor" stroke-width="1"/></svg></b>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="nav">
+      <div class="navtop">
+        <svg class="hamb" viewBox="0 0 24 24" fill="none" stroke="#1B1B1B" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <b>资料库</b>
+      </div>
+
+      <div class="item on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></svg>全部解析<span class="n">12</span></div>
+      <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 15l4.5-4.5 3.5 3.5 3-3 6 5.5"/></svg>图片<span class="n">8</span></div>
+      <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="5.5" width="12" height="13" rx="2"/><path d="M15.5 10l5-3v10l-5-3"/></svg>视频<span class="n">4</span></div>
+      <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12.5l5 5L20 6.5"/></svg>已完成<span class="n">5</span></div>
+
+      <div class="glabel">工具</div>
+      <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v3M12 17.5v3"/></svg>资源嗅探</div>
+
+      <div class="glabel">下载</div>
+      <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3.5v11M7.5 10.5L12 15l4.5-4.5M4 20.5h16"/></svg>下载队列<span class="n">2</span></div>
+      <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.2l3.4 2"/></svg>下载历史</div>
+
+      <div class="navfoot">
+        <div class="disk"><span>磁盘</span><span>65 GB 可用</span></div>
+        <div class="pbar-disk"><i></i></div>
+        <div class="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v3M12 18.2v3M2.8 12h3M18.2 12h3M5.5 5.5l2.1 2.1M16.4 16.4l2.1 2.1M18.5 5.5l-2.1 2.1M7.6 16.4L5.5 18.5"/></svg>
+          设置</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="head">
+        <h1>全部解析</h1><span class="cnt">12 项</span>
+        <div class="hright">
+          <div class="search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8A8A8A" stroke-width="1.9"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+            搜索作品
+          </div>
+          <div class="iconbtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v3M12 18.2v3M2.8 12h3M18.2 12h3M5.5 5.5l2.1 2.1M16.4 16.4l2.1 2.1M18.5 5.5l-2.1 2.1M7.6 16.4L5.5 18.5"/></svg></div>
+        </div>
+      </div>
+
+      <div class="imp">
+        <div class="field">粘贴抖音 / B站 / 小红书链接，支持一次粘贴多条</div>
+        <div class="btn standard">粘贴</div>
+        <div class="btn primary">解析</div>
+      </div>
+
+      <div class="list">
+        <div class="card">
+          <div class="thumb">
+            <svg viewBox="0 0 160 100" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+              <defs>
+                <linearGradient id="w1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#0A1420"/><stop offset=".5" stop-color="#192939"/>
+                  <stop offset="1" stop-color="#060B12"/></linearGradient>
+                <radialGradient id="wl1"><stop offset="0" stop-color="#FFC873" stop-opacity=".9"/>
+                  <stop offset="1" stop-color="#FFC873" stop-opacity="0"/></radialGradient>
+              </defs>
+              <rect width="160" height="100" fill="url(#w1)"/>
+              <rect x="96" y="24" width="28" height="76" fill="#0F1A27"/>
+              <rect x="128" y="40" width="20" height="60" fill="#0B141F"/>
+              <rect x="16" y="48" width="24" height="52" fill="#0C1724"/>
+              <ellipse cx="54" cy="54" rx="30" ry="12" fill="url(#wl1)"/>
+              <ellipse cx="108" cy="62" rx="24" ry="10" fill="url(#wl1)" opacity=".55"/>
+              <rect x="53" y="28" width="1.4" height="72" fill="#26364A"/>
+              <circle cx="54" cy="28" r="2.2" fill="#FFDCA4"/>
+            </svg>
+            <span class="dur">00:42</span>
+          </div>
+          <div class="info">
+            <div class="tit">凌晨四点的城市，只有路灯还醒着</div>
+            <div class="meta"><span class="tag">无水印</span><b>抖音</b><span>·</span><b>@林间摄影</b><span>·</span><span>1920×1080</span><span>·</span><span>8.4 MB</span></div>
+            <div class="cfoot">
+              <span class="lb">清晰度</span>
+              <div class="seg"><span class="on">1080P 原画</span><span>720P</span><span>仅音频</span></div>
+              <div class="rowend">
+                <span class="hint">~/Downloads/MediaGrab</span>
+                <div class="btn primary sm">下载</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="thumb">
+            <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1px;width:100%;height:100%">
+              <div style="background:linear-gradient(150deg,#D9B45E,#8E7A2E)"></div>
+              <div style="background:linear-gradient(150deg,#C6A34C,#6E6329)"></div>
+              <div style="background:linear-gradient(150deg,#E0C271,#9A8438)"></div>
+              <div style="background:linear-gradient(150deg,#B8933F,#5F5524)"></div>
+            </div>
+            <span class="dur">9 张</span>
+          </div>
+          <div class="info">
+            <div class="tit">京都十一月的银杏，总共去了四次</div>
+            <div class="meta"><span class="tag">原图</span><b>小红书</b><span>·</span><b>@aki_still</b><span>·</span><span>9 张</span><span>·</span><span>24.6 MB</span></div>
+            <div class="cfoot">
+              <div class="chk"><em><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2"><path d="M4 12.5l5 5L20 7"/></svg></em>全选</div>
+              <span class="hint">实况照片会一并保存</span>
+              <div class="rowend"><div class="btn primary sm">下载 9 张</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="thumb">
+            <svg viewBox="0 0 160 100" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+              <defs>
+                <linearGradient id="w3" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#1E2E3D"/><stop offset=".42" stop-color="#C47945"/>
+                  <stop offset=".62" stop-color="#E7A15A"/><stop offset="1" stop-color="#38373B"/></linearGradient>
+                <radialGradient id="wu3"><stop offset="0" stop-color="#FFE0A8" stop-opacity=".95"/>
+                  <stop offset="1" stop-color="#FFCF8A" stop-opacity="0"/></radialGradient>
+              </defs>
+              <rect width="160" height="100" fill="url(#w3)"/>
+              <ellipse cx="80" cy="44" rx="34" ry="14" fill="url(#wu3)"/>
+              <circle cx="80" cy="44" r="7" fill="#FFE7BB"/>
+              <rect y="58" width="160" height="42" fill="#1B262F" opacity=".55"/>
+              <rect y="58" width="160" height="1" fill="#F0C08A" opacity=".5"/>
+            </svg>
+            <span class="dur">12:08</span>
+          </div>
+          <div class="info">
+            <div class="tit">海边日落延时，4K 60 帧原片</div>
+            <div class="meta"><b>B站</b><span>·</span><b>@slowtide</b><span>·</span><span>3840×2160</span><span>·</span><span>1.2 GB</span></div>
+            <div class="cfoot">
+              <span class="lb">清晰度</span>
+              <div class="seg"><span>4K 原画</span><span class="on">1080P</span><span>720P</span></div>
+              <div class="rowend">
+                <span class="hint">4K 需要 ffmpeg 合并</span>
+                <div class="btn primary sm">下载</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="live">
+          <span class="num" style="font-weight:600;color:#1B1B1B">68%</span>
+          <span class="t">正在下载 · <b>凌晨四点的城市，只有路灯还醒着</b>　1080P</span>
+          <div class="pb"><i></i></div>
+          <span class="num">2.1 MB/s</span>
+          <span class="num" style="color:#8A8A8A">剩 3 秒</span>
+        </div>
+      </div>
+
+      <div class="status">
+        <span class="sl">保存到</span>
+        <span>C:\Users\a1358\Downloads\MediaGrab</span>
+        <span class="link">更改</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5F5F5F" stroke-width="1.7"><path d="M3 7.5h6l2 2.5h10v9H3z"/></svg>
+        <span class="sep"></span>
+        <span class="sl">下载方式</span><span>内置</span>
+        <span class="sep"></span>
+        <div class="sw"><i></i></div>
+        <span>下载后打开</span>
+        <span style="margin-left:auto;color:#8A8A8A">就绪</span>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

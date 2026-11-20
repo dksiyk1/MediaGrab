@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<style>
+:root{
+  --paper:#F2F2EF; --card:#fff; --ink:#16161A; --ink2:#5C5C63; --ink3:#8E8E93;
+  --line:#DCDCD6; --line2:#EBEBE5; --red:#C42B1C; --blue:#0067C0;
+  --font:"Segoe UI Variable Display","Segoe UI","Microsoft YaHei UI","PingFang SC",sans-serif;
+  --mono:Consolas,"SF Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:1560px}
+body{width:1560px;font-family:var(--font);background:var(--paper);color:var(--ink);
+  -webkit-font-smoothing:antialiased;padding:40px 44px 34px}
+
+/* ---------- 页头 ---------- */
+.eyebrow{font-size:10px;letter-spacing:.22em;color:var(--ink3);font-weight:600}
+h1{font-size:25px;font-weight:600;letter-spacing:-.4px;margin-top:9px}
+.dek{font-size:12.5px;color:var(--ink2);margin-top:9px;line-height:1.65;max-width:760px}
+.meta{margin-left:auto;text-align:right;font-size:10.5px;color:var(--ink3);line-height:1.85}
+.meta b{display:block;color:var(--ink2);font-weight:500;font-size:11px}
+.head{display:flex;align-items:flex-start;padding-bottom:22px;border-bottom:1px solid var(--line)}
+
+/* ---------- 两列 ---------- */
+.cols{display:flex;gap:36px;margin-top:26px}
+.col{width:718px}
+.chead{display:flex;align-items:baseline;gap:9px;margin-bottom:9px}
+.chead .tag{font-size:9.5px;font-weight:600;letter-spacing:.12em;padding:2px 6px;border-radius:3px}
+.before .tag{background:#E6E6E0;color:#55555C}
+.after .tag{background:var(--blue);color:#fff}
+.chead .nm{font-size:13.5px;font-weight:600}
+.chead .dim{font-size:11px;color:var(--ink3);margin-left:auto;font-variant-numeric:tabular-nums}
+.chead .nm .lite{color:var(--ink3);font-weight:400}
+
+.shot{position:relative;width:718px;height:462px;overflow:hidden;border-radius:8px;
+  box-shadow:0 10px 28px rgba(16,18,24,.14),0 1px 3px rgba(16,18,24,.10)}
+.shot img{display:block;width:718px;position:absolute;left:0;top:0}
+.cap{font-size:11.5px;color:var(--ink2);line-height:1.6;margin-top:10px;min-height:38px}
+
+/* ---------- 放大切片 ---------- */
+.zooms{display:flex;gap:12px;margin-top:14px}
+.z{width:340px}
+.z .crop{position:relative;width:340px;height:74px;overflow:hidden;border-radius:12px;
+  border:1px solid var(--line);background:#fff}
+.z .crop img{display:block;width:340px;height:74px}
+.miss{position:absolute;left:127px;top:1px;width:212px;height:70px;
+  border:1px dashed rgba(196,43,28,.42);border-radius:3px}
+.miss span{position:absolute;left:50%;top:4px;transform:translateX(-50%);
+  font-size:8px;font-weight:600;letter-spacing:.06em;color:#A63E32;background:#fff;
+  padding:1px 5px;border-radius:2px;white-space:nowrap}
+.z .lb{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ink3);margin-top:6px}
+.z .lb i{width:13px;height:13px;border-radius:50%;background:#EFEFE9;color:#77777E;
+  font-size:8.5px;font-style:normal;display:flex;align-items:center;justify-content:center;
+  font-weight:700;flex:0 0 13px}
+.z .lb.na i{background:#F6E7E5;color:var(--red)}
+.z .lb .tag2{margin-left:auto;color:#A8A8A2;font-family:var(--mono);font-size:9px}
+
+/* ---------- 规格表 ---------- */
+table{width:100%;border-collapse:collapse;margin-top:30px;font-size:11.5px}
+th{text-align:left;font-size:9.5px;letter-spacing:.14em;color:var(--ink3);font-weight:600;
+  padding:0 12px 8px;border-bottom:1px solid var(--ink);text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid var(--line2);vertical-align:top;line-height:1.5}
+td.k{font-weight:600;width:132px}
+td.a{color:var(--ink2);width:300px}
+td.b{width:330px}
+td.why{color:var(--ink3);font-size:11px;width:auto}
+tr:last-child td{border-bottom:1px solid var(--line)}
+.mono{font-family:var(--mono);font-size:10.5px}
+.chip{display:inline-block;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:600}
+.chip.gray{background:#ECECE6;color:#5C5C63}
+.chip.blue{background:rgba(0,103,192,.10);color:var(--blue)}
+.chip.red{background:rgba(196,43,28,.10);color:var(--red)}
+
+/* ---------- 页脚 ---------- */
+.foot{display:flex;gap:26px;margin-top:24px;padding-top:16px;border-top:1px solid var(--line)}
+.note{flex:1;font-size:11px;color:var(--ink2);line-height:1.75}
+.note b{color:var(--ink);font-weight:600}
+.stats{display:flex;gap:20px;align-items:flex-end}
+.stat{text-align:right}
+.stat u{display:block;font-style:normal;text-decoration:none;font-size:19px;font-weight:600;
+  letter-spacing:-.4px;font-variant-numeric:tabular-nums}
+.stat span{font-size:9.5px;color:var(--ink3);letter-spacing:.08em}
+</style></head>
+<body>
+
+<div class="head">
+  <div>
+    <div class="eyebrow">WINDOW CHROME · 变更对照</div>
+    <h1>窗口控制：从 macOS 红绿灯换成 Windows 11 三键</h1>
+    <div class="dek">同一份内容、同一套功能，只改窗口控制区。窗体 1180 × 760，与真实窗口一致；界面其余部分逐像素未动。</div>
+  </div>
+  <div class="meta">
+    <b>MediaGrab</b>
+    窗口 1180 × 760 · 2× 渲染<br>2026-11-17
+  </div>
+</div>
+
+<div class="cols">
+  <div class="col before">
+    <div class="chead">
+      <span class="tag">改前</span>
+      <span class="nm">红绿灯 <span class="lite">· 左上自绘</span></span>
+      <span class="dim">3 点 · 12px</span>
+    </div>
+    <div class="shot"><img src="renders/before_full.png" alt="改前"></div>
+    <div class="cap">三个圆点压在侧栏顶部，兼作拖动区。颜色即语义，但要靠位置记功能；命中区只有 12px 加一圈 4px 热区。窗口控件占着侧栏第一行，品牌名无处可放。</div>
+    <div class="zooms">
+      <div class="z">
+        <div class="crop"><img src="renders/z_before_left.png" alt=""></div>
+        <div class="lb"><i>1</i>左上 · 只有三个点，无标识</div>
+      </div>
+      <div class="z">
+        <div class="crop"><img src="renders/z_before_right.png" alt="">
+          <div class="miss"><span>按钮区被搜索框占用</span></div>
+        </div>
+        <div class="lb na"><i>2</i>右侧 · 搜索框顶到边，无按钮</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col after">
+    <div class="chead">
+      <span class="tag">改后</span>
+      <span class="nm">系统三键 <span class="lite">· 右上 46×46</span></span>
+      <span class="dim">3 键 · 138px</span>
+    </div>
+    <div class="shot"><img src="renders/after_full.png" alt="改后"></div>
+    <div class="cap">按钮回到 Windows 用户默认会去找的位置，整块 46 × 46 都可点；左上腾出来放应用名，搜索框左移 78px 让出按钮区。内容区一行未变。</div>
+    <div class="zooms">
+      <div class="z">
+        <div class="crop"><img src="renders/z_after_left.png" alt=""></div>
+        <div class="lb"><i>1</i>左上 · 腾出位置放应用名</div>
+      </div>
+      <div class="z">
+        <div class="crop"><img src="renders/z_after_right.png" alt=""></div>
+        <div class="lb"><i>2</i>右侧 · 搜索左移 78px + 三键</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<table>
+  <thead><tr>
+    <th>项目</th><th>改前</th><th>改后</th><th>依据</th>
+  </tr></thead>
+  <tbody>
+    <tr>
+      <td class="k">按钮位置</td>
+      <td class="a">左上，侧栏顶部</td>
+      <td class="b">右上，标题行末端</td>
+      <td class="why">Windows 用户的第一落点</td>
+    </tr>
+    <tr>
+      <td class="k">命中区</td>
+      <td class="a"><span class="mono">12px</span> 圆点 + <span class="mono">4px</span> 热区</td>
+      <td class="b"><span class="mono">46 × 46</span> 整块</td>
+      <td class="why">不用瞄准；触摸屏可点</td>
+    </tr>
+    <tr>
+      <td class="k">关闭态</td>
+      <td class="a">红点颜色加深（同色系）</td>
+      <td class="b"><span class="chip red">#C42B1C</span> 底 + 字形转白</td>
+      <td class="why">WinUI 危险动作专用色</td>
+    </tr>
+    <tr>
+      <td class="k">左上角</td>
+      <td class="a">三个点，占 <span class="mono">52 × 12</span></td>
+      <td class="b">空出，放应用名 MediaGrab</td>
+      <td class="why">导航区不再被窗口控件打断</td>
+    </tr>
+    <tr>
+      <td class="k">搜索框右距</td>
+      <td class="a"><span class="mono">16px</span></td>
+      <td class="b"><span class="mono">154px</span>（让出 138px）</td>
+      <td class="why">不压按钮命中区</td>
+    </tr>
+    <tr>
+      <td class="k">最大化圆角</td>
+      <td class="a">恒定 <span class="mono">12px</span></td>
+      <td class="b"><span class="mono">12 → 0</span>，图标切成「还原」</td>
+      <td class="why">Win11 最大化后窗口是直角</td>
+    </tr>
+    <tr>
+      <td class="k">拖动区</td>
+      <td class="a">侧栏顶 <span class="mono">224 × 46</span></td>
+      <td class="b">标题行整条，扣除 138px 按钮</td>
+      <td class="why">右手也能拖窗</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="foot">
+  <div class="note">
+    <b>落地要补三件事。</b>一是最大化时圆角置 0、图标切「还原」，否则四角会露白；二是删红绿灯控件时同步清掉
+    <span class="mono">activeChanged</span> 里的 <span class="mono">set_active</span> 回调，不然失焦会报错；三是按钮区用
+    <span class="mono">childAt</span> 从拖动区里排除，中间那段仍要能拖。<br>
+    可选：调 <span class="mono">DwmSetWindowAttribute(DWMWA_WINDOW_CORNER_PREFERENCE)</span> 交给系统画圆角与投影，比自绘更稳，Win10 回落自绘。
+  </div>
+  <div class="stats">
+    <div class="stat"><u>3</u><span>结构变化</span></div>
+    <div class="stat"><u>0</u><span>功能增减</span></div>
+    <div class="stat"><u>138<span style="font-size:12px">px</span></u><span>按钮区宽</span></div>
+  </div>
+</div>
+
+</body></html>

@@ -1,0 +1,139 @@
+/* 现有界面（macOS Tahoe 视觉）原样重建 —— 数值取自 mediagrab/ui/theme.py */
+:root{
+  --accent:#007AFF;
+  --text1:#1D1D1F; --text2:#6E6E73; --text3:#8E8E93;
+  --win-bg:#EDEEF3;
+  --sep:rgba(0,0,0,.075);
+  --card-stroke:rgba(0,0,0,.065);
+  --field-stroke:rgba(0,0,0,.13);
+  --fill:rgba(120,120,128,.11);
+  --font:"Segoe UI Variable Display","Segoe UI","Microsoft YaHei UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:1232px;height:812px;overflow:hidden}
+body{width:1232px;height:812px;overflow:hidden;font-family:var(--font);
+  -webkit-font-smoothing:antialiased;padding:26px;
+  background:linear-gradient(140deg,#3C4553 0%,#4B5566 45%,#39424E 100%)}
+.frame{position:relative;width:1180px;height:760px;border-radius:12px;overflow:hidden;
+  background:
+    radial-gradient(52% 44% at 4% 0%,#F8EADF 0%,rgba(248,234,223,0) 62%),
+    radial-gradient(46% 40% at 96% 4%,#E7EBF7 0%,rgba(231,235,247,0) 64%),
+    linear-gradient(135deg,#F1EDF0 0%,#EEEFF4 42%,#ECEEF4 100%);
+  box-shadow:0 26px 70px rgba(10,14,20,.42),0 2px 8px rgba(10,14,20,.20)}
+
+/* ---------- 侧栏 ---------- */
+.side{position:absolute;left:0;top:0;width:224px;height:760px;
+  background:rgba(244,244,247,.62);backdrop-filter:blur(50px) saturate(150%);
+  border-right:1px solid var(--sep);display:flex;flex-direction:column;padding:0 12px}
+.brand{height:46px;display:flex;align-items:center;gap:8px;padding:0 4px}
+.brand .nm{font-size:12px;font-weight:600;color:var(--text1);letter-spacing:.01em}
+.glabel{font-size:10.5px;color:var(--text3);padding:14px 8px 6px;letter-spacing:.02em}
+.item{height:28px;border-radius:7px;display:flex;align-items:center;gap:8px;padding:0 8px;
+  margin-bottom:5px;font-size:12.5px;color:var(--text1)}
+.item svg{width:14px;height:14px;flex:0 0 14px;color:var(--text2)}
+.item .n{margin-left:auto;font-size:11px;color:var(--text3)}
+.item.on{background:#FFFFFF;color:var(--accent);font-weight:600;
+  box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.item.on svg{color:var(--accent)}
+.sidefoot{margin-top:auto;padding:10px 2px 12px}
+.diskrow{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);
+  padding:0 6px}
+.diskbar{height:4px;border-radius:2px;background:rgba(120,120,128,.16);margin:7px 6px 14px;
+  overflow:hidden}
+.diskbar i{display:block;height:100%;width:38%;background:#B9BCC6;border-radius:2px}
+.setrow{height:28px;border-radius:7px;display:flex;align-items:center;gap:8px;padding:0 8px;
+  font-size:12.5px;color:var(--text1)}
+.setrow svg{width:14px;height:14px;color:var(--text2)}
+
+/* ---------- 内容区 ---------- */
+.content{position:absolute;left:224px;top:0;width:956px;height:760px;
+  background:rgba(255,255,255,.62);display:flex;flex-direction:column}
+.toolbar{position:relative;height:52px;flex:0 0 52px;display:flex;align-items:center;
+  padding:0 16px 0 20px}
+.toolbar h1{font-size:14px;font-weight:600;color:var(--text1);letter-spacing:-.1px}
+.search{position:absolute;right:154px;top:12px;width:200px;height:28px;border-radius:7px;
+  background:var(--fill);display:flex;align-items:center;gap:6px;padding:0 10px 0 30px;
+  font-size:12px;color:var(--text3)}
+.search svg{position:absolute;left:9px;top:6.5px;color:var(--text3)}
+/* 导入条 */
+.imp{position:relative;height:66px;flex:0 0 66px;padding:14px 16px 15px 18px;
+  border-bottom:1px solid var(--sep);display:flex;gap:8px}
+.field{position:relative;flex:1;height:38px;border-radius:9px;background:#fff;
+  border:1px solid var(--field-stroke);display:flex;align-items:center;padding:0 54px 0 13px;
+  font-size:12.5px;color:var(--text3)}
+.paste{position:absolute;right:6px;top:6px;width:44px;height:24px;border-radius:6px;
+  background:var(--fill);color:var(--text2);font-size:11.5px;display:flex;align-items:center;
+  justify-content:center}
+.go{width:64px;height:38px;border-radius:9px;color:#fff;font-size:13.5px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(#1B87FF,#0071E3);border:1px solid rgba(0,80,180,.55);
+  box-shadow:0 1px 2px rgba(0,90,200,.25)}
+/* 空态 */
+.empty{flex:1;display:flex;align-items:flex-start;justify-content:center;padding-top:100px}
+.empty span{font-size:12.5px;color:var(--text3)}
+/* 卡片 */
+.cards{flex:1;padding:16px 16px 0;overflow:hidden}
+.card{background:#fff;border:1px solid var(--card-stroke);border-radius:12px;padding:14px 16px;
+  margin-bottom:10px}
+.hero{display:flex;gap:14px}
+.cover{width:56px;height:56px;flex:0 0 56px;border-radius:8px;overflow:hidden;position:relative;
+  background:#111}
+.cover.lg{width:120px;height:120px;flex:0 0 120px}
+.cover .dur{position:absolute;right:3px;bottom:3px;font-size:9.5px;color:#fff;
+  background:rgba(0,0,0,.5);border-radius:3px;padding:0 3px;font-variant-numeric:tabular-nums}
+.hcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.tit{font-size:13.5px;font-weight:600;color:var(--text1);letter-spacing:-.1px;line-height:19px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{font-size:11.5px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.tags{display:flex;gap:6px;margin-top:1px}
+.tagb{font-size:11px;font-weight:500;color:var(--accent);background:rgba(0,122,255,.12);
+  border-radius:4px;padding:1px 6px}
+.tagg{font-size:11px;color:var(--text2);background:var(--fill);border-radius:4px;padding:1px 6px}
+.frow{display:flex;align-items:center;gap:8px;margin-top:2px}
+.flb{width:38px;font-size:11.5px;color:var(--text3);flex:0 0 38px}
+.fseg{display:flex;gap:2px;padding:2px;border-radius:7px;background:var(--fill);height:26px}
+.fseg span{display:flex;align-items:center;padding:0 9px;border-radius:5px;font-size:11px;
+  color:var(--text1)}
+.fseg span.on{background:#fff;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.10)}
+.cbadge{font-size:11px;color:var(--text3);text-align:right;flex:0 0 auto}
+.gal{display:flex;gap:8px;margin-top:12px}
+.gal i{width:68px;height:68px;border-radius:8px;display:block}
+.gfoot{display:flex;align-items:center;gap:10px;margin-top:12px}
+.gfoot .hint{flex:1;font-size:11px;color:var(--text3)}
+.ghost{height:28px;padding:0 10px;border-radius:7px;font-size:12.5px;color:var(--text2);
+  display:flex;align-items:center}
+.prim{height:28px;padding:0 14px;border-radius:7px;font-size:12.5px;color:#fff;
+  display:flex;align-items:center;background:linear-gradient(#1B87FF,#0071E3);
+  border:1px solid rgba(0,80,180,.55)}
+/* 状态栏 */
+.status{position:absolute;left:0;bottom:0;width:956px;height:58px;
+  background:rgba(255,255,255,.62);border-top:1px solid var(--sep);
+  padding:9px 16px 8px;display:flex;flex-direction:column;gap:6px}
+.srow{display:flex;align-items:center;gap:8px}
+.sl{font-size:10.5px;color:var(--text3);white-space:nowrap}
+.diredit{width:220px;height:28px;border-radius:6px;background:#fff;border:1px solid var(--field-stroke);
+  display:flex;align-items:center;padding:0 8px;font-size:11.5px;color:var(--text2);
+  overflow:hidden;white-space:nowrap}
+.sbtn{height:28px;padding:0 10px;border-radius:6px;font-size:11.5px;color:var(--text2);
+  display:flex;align-items:center;border:1px solid var(--field-stroke);background:#fff}
+.iconbtn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  color:var(--text2)}
+.combo{width:86px;height:28px;border-radius:6px;background:#fff;border:1px solid var(--field-stroke);
+  display:flex;align-items:center;padding:0 7px;font-size:11.5px;color:var(--text1);gap:4px}
+.sw{width:36px;height:21px;border-radius:11px;background:rgba(120,120,128,.24);position:relative}
+.sw i{position:absolute;left:2px;top:2px;width:17px;height:17px;border-radius:50%;background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.ready{margin-left:auto;font-size:11px;color:var(--text2)}
+.sprog{height:4px;border-radius:2px;background:rgba(120,120,128,.12);margin:0 0 0 0}
+
+/* ---------- Windows 11 窗口按钮 ---------- */
+.caps{position:absolute;right:0;top:0;height:46px;display:flex;z-index:20}
+.cap{width:46px;height:46px;display:flex;align-items:center;justify-content:center;
+  color:#1B1B1B}
+.cap:hover{background:rgba(0,0,0,.0605)}
+.cap:active{background:rgba(0,0,0,.0373)}
+.cap.close{border-top-right-radius:12px}
+.cap.close:hover{background:#C42B1C;color:#FFFFFF}
+.cap.close:active{background:#B12A1C;color:rgba(255,255,255,.9)}
+.cap.close:hover svg,.cap.close:active svg{stroke:currentColor}
+.dragzone{position:absolute;left:224px;top:0;width:956px;height:46px;z-index:1}

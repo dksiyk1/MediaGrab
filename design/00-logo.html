@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><style>
+:root{--paper:#F6F4EF;--ink:#161513;--g1:#7C766C;--g2:#ABA49A;--line:#E2DED5;--acc:#A4402E}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1180px;height:760px;overflow:hidden;background:#D9D5CC;
+  font-family:"Segoe UI","Microsoft YaHei UI",sans-serif;-webkit-font-smoothing:antialiased}
+.sheet{width:1180px;height:760px;background:var(--paper);padding:0 40px;
+  box-shadow:0 26px 64px rgba(30,26,20,.22);display:flex;flex-direction:column}
+.head{height:58px;flex:0 0 58px;display:flex;align-items:center;border-bottom:1px solid var(--line)}
+.head .t{font-size:11px;letter-spacing:.22em;color:var(--ink);font-weight:600}
+.head .t2{font-size:10px;color:var(--g1);margin-left:12px;letter-spacing:.14em}
+.head .s{font-size:9.5px;color:var(--g2);margin-left:20px;letter-spacing:.12em}
+.head .v{margin-left:auto;font-size:9.5px;color:var(--g2);letter-spacing:.14em;
+  border:1px solid var(--line);padding:2px 7px;border-radius:2px}
+.row{display:flex;gap:24px}
+.panel{background:#FBF9F4;border:1px solid var(--line);position:relative}
+.hero{flex:1;height:286px;display:flex;align-items:center;justify-content:center}
+.cap{position:absolute;left:14px;top:12px;font-size:9px;letter-spacing:.18em;color:var(--g2)}
+.cap2{position:absolute;left:14px;bottom:12px;font-size:9.5px;color:var(--g1);letter-spacing:.02em}
+.con{flex:0 0 470px;height:286px;padding:0}
+.note{flex:1;height:286px;padding:26px 0 0 0}
+.note h2{font-size:26px;font-weight:600;letter-spacing:-.01em;color:var(--ink);line-height:1.3}
+.note h2 em{font-style:normal;color:var(--acc)}
+.note p{font-size:11.5px;line-height:1.9;color:var(--g1);margin-top:10px;max-width:330px}
+.spec{margin-top:auto}
+.kv{display:flex;gap:10px;font-size:10px;color:var(--g1);padding:5px 0;border-bottom:1px dotted var(--line)}
+.kv b{width:56px;color:var(--g2);font-weight:400;letter-spacing:.08em}
+.row2{display:flex;gap:24px;margin-top:22px;flex:0 0 auto}
+.box{background:#FBF9F4;border:1px solid var(--line);height:154px;padding:12px 14px;position:relative}
+.box .lb{font-size:9px;letter-spacing:.18em;color:var(--g2);margin-bottom:12px}
+.sizes{flex:1;display:flex;align-items:flex-end;gap:26px}
+.sz{display:flex;flex-direction:column;align-items:center;gap:8px}
+.sz span{font-size:8.5px;color:var(--g2);letter-spacing:.06em}
+.sz .m{display:flex;align-items:flex-end;height:64px}
+.treat{flex:0 0 300px;display:flex;gap:14px;align-items:center}
+.tile{width:64px;height:64px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
+.tile.dark{background:var(--ink);border-color:var(--ink)}
+.lock{flex:1;height:96px;background:#FBF9F4;border:1px solid var(--line);display:flex;
+  align-items:center;justify-content:center;gap:40px;margin-top:16px}
+.lk{display:flex;align-items:center;gap:9px}
+.lk .w{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+.lk .w i{font-style:normal;font-weight:400;color:var(--g2)}
+.lk .w em{font-style:normal;font-size:9px;color:var(--g1);letter-spacing:.02em;margin-left:6px}
+.lk .d{width:1px;height:16px;background:var(--line)}
+.stacked{display:flex;flex-direction:column;align-items:center;gap:5px}
+.stacked .w{font-size:12px;letter-spacing:.24em;font-weight:600;color:var(--ink)}
+.stacked .s{font-size:7.5px;letter-spacing:.3em;color:var(--g2)}
+.dots{display:flex;gap:6px;margin-top:14px}
+.dots i{width:10px;height:10px;border-radius:50%;display:block}
+.foot{margin-top:auto;height:34px;display:flex;align-items:center;font-size:9px;color:var(--g2);
+  letter-spacing:.1em;border-top:1px solid var(--line)}
+.foot span+span{margin-left:18px}
+</style></head><body>
+<div class="sheet">
+  <div class="head">
+    <span class="t">MEDIAGRAB</span><span class="t2">标识系统</span>
+    <span class="s">Capture Frame · 捕获框</span>
+    <span class="v">v2 · 2026.11</span>
+  </div>
+
+  <div class="row" style="margin-top:22px">
+    <div class="panel hero">
+      <span class="cap">主标识 · 单色 · 24×24 网格</span>
+      <svg width="176" height="176" viewBox="0 0 24 24" fill="none">
+        <path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2"
+              stroke="#161513" stroke-width="1.5"/>
+        <rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#161513"/>
+      </svg>
+      <span class="cap2">四个取景角 + 中心实体：框住的，正是要拿走的。</span>
+    </div>
+
+    <div class="panel con">
+      <span class="cap">构造 · 直角无圆角，描边 1.5u</span>
+      <svg width="470" height="286" viewBox="0 0 470 286">
+        <g transform="translate(26,22)">
+          <rect x="0" y="0" width="212" height="212" fill="none" stroke="#E7E2D8" stroke-width="1"/>
+          <line x1="106" y1="-8" x2="106" y2="220" stroke="#C9C1B2" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="-8" y1="106" x2="220" y2="106" stroke="#C9C1B2" stroke-width="1" stroke-dasharray="3 3"/>
+          <g transform="translate(2,2) scale(8.67)">
+            <path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2"
+                  fill="none" stroke="#161513" stroke-width="1.5"/>
+            <rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#A4402E"/>
+          </g>
+          <text x="0" y="228" font-size="8" fill="#ABA49A" font-family="Consolas">24u</text>
+          <text x="106" y="228" font-size="8" fill="#ABA49A" font-family="Consolas" text-anchor="middle">中心对齐</text>
+          <text x="216" y="106" font-size="8" fill="#ABA49A" font-family="Consolas" text-anchor="start" dx="4">24u</text>
+        </g>
+        <g transform="translate(272,26)" font-family="'Segoe UI'" font-size="9.5" fill="#7C766C">
+          <text y="0" font-size="8" fill="#ABA49A" letter-spacing="1.4">CONSTRUCTION</text>
+          <line x1="0" y1="11" x2="178" y2="11" stroke="#E2DED5"/>
+          <text y="32">描边　1.5u（16px 时 1px）</text>
+          <text y="52">角长　5.2u　线端平头，转角无圆角</text>
+          <text y="72">中心块　5.6u，与四角同墨色</text>
+          <text y="92">留白　各边 3.2u，不可缩小</text>
+          <text y="112">最小尺寸　24px（完整版）</text>
+          <text y="132">16–20px 用简化版，去掉中心块</text>
+          <line x1="0" y1="148" x2="178" y2="148" stroke="#E2DED5"/>
+          <text y="168" font-size="8" fill="#ABA49A" letter-spacing="1.4">WHY THIS MARK</text>
+          <text y="188">播放键、下箭头、云朵已被用尽。</text>
+          <text y="206">取景框说的是「我看见了这个」，</text>
+          <text y="224">实心块说的是「这个归我了」。</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="note">
+      <h2>Media<span style="color:#ABA49A">Grab</span> <em>·</em> 拾取</h2>
+      <p>标识只有两个元素：四个直角，一个实心块。不描光影、不用渐变、不做立体 —— 它在 16px 的任务栏、256px 的启动图、黑白印刷里是同一个东西。</p>
+      <div class="spec">
+        <div class="kv"><b>字形</b><span>无衬线正文 + 中文「拾取」小字，字距 +2%</span></div>
+        <div class="kv"><b>单色</b><span>墨 #161513 / 反白 #FBF9F4，不引入第二色</span></div>
+        <div class="kv"><b>强调</b><span>仅在中心块可换主题色，其余部分永远同色</span></div>
+        <div class="kv" style="border:0"><b>禁用</b><span>渐变、描边发光、圆角化、加投影、拉伸</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="box" style="flex:1">
+      <div class="lb">尺寸 · 16 / 20 用简化版，24 起用完整版</div>
+      <div class="sizes">
+        <div class="sz"><div class="m">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 8.6V3h5.6M15.4 3H21v5.6M21 15.4V21h-5.6M8.6 21H3v-5.6" stroke="#161513" stroke-width="2.6" shape-rendering="crispEdges"/></svg>
+        </div><span>16</span></div>
+        <div class="sz"><div class="m">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 8.6V3h5.6M15.4 3H21v5.6M21 15.4V21h-5.6M8.6 21H3v-5.6" stroke="#161513" stroke-width="2.1" shape-rendering="crispEdges"/></svg>
+        </div><span>20</span></div>
+        <div class="sz"><div class="m">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2" stroke="#161513" stroke-width="1.8"/><rect x="9.6" y="9.6" width="4.8" height="4.8" fill="#161513"/></svg>
+        </div><span>24</span></div>
+        <div class="sz"><div class="m">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2" stroke="#161513" stroke-width="1.6"/><rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#161513"/></svg>
+        </div><span>32</span></div>
+        <div class="sz"><div class="m">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2" stroke="#161513" stroke-width="1.5"/><rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#161513"/></svg>
+        </div><span>48</span></div>
+        <div class="sz"><div class="m">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2" stroke="#161513" stroke-width="1.5"/><rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#161513"/></svg>
+        </div><span>64</span></div>
+        <div style="margin-left:auto;display:flex;flex-direction:column;gap:6px;font-size:9px;color:#ABA49A;line-height:1.7">
+          <span>16–20px 去掉中心块，否则糊成一团</span>
+          <span>不做横向 / 纵向的拉伸变体</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="box" style="flex:0 0 316px">
+      <div class="lb">单色处理 · 中心块可换主题色</div>
+      <div class="treat">
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+          <div class="tile">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2" stroke="#161513" stroke-width="1.5"/><rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#161513"/></svg>
+          </div>
+          <span style="font-size:8.5px;color:#ABA49A">墨</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+          <div class="tile dark">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2" stroke="#FBF9F4" stroke-width="1.5"/><rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#FBF9F4"/></svg>
+          </div>
+          <span style="font-size:8.5px;color:#ABA49A">反白</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+          <div class="tile">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2" stroke="#161513" stroke-width="1.5"/><rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#A4402E"/></svg>
+          </div>
+          <span style="font-size:8.5px;color:#ABA49A">主题色</span>
+        </div>
+      </div>
+      <div class="dots">
+        <i style="background:#A4402E"></i><i style="background:#E4A33B"></i>
+        <i style="background:#E2231A"></i><i style="background:#2C5545"></i>
+        <i style="background:#2B4C7E"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="lock">
+    <div class="lk">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2" stroke="#161513" stroke-width="1.5"/><rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#A4402E"/></svg>
+      <span class="d"></span>
+      <span class="w">MediaGrab <em>拾取</em></span>
+    </div>
+    <div class="lk">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2" stroke="#161513" stroke-width="1.5"/><rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#161513"/></svg>
+      <span class="d"></span>
+      <span class="w" style="letter-spacing:.16em;font-size:12px">MEDIAGRAB</span>
+    </div>
+    <div class="stacked">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3.2 8.4V3.2h5.2M15.6 3.2h5.2v5.2M20.8 15.6v5.2h-5.2M8.4 20.8H3.2v-5.2" stroke="#161513" stroke-width="1.5"/><rect x="9.2" y="9.2" width="5.6" height="5.6" fill="#161513"/></svg>
+      <span class="w">MEDIAGRAB</span><span class="s">MEDIA CAPTURE</span>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>标识仅用「直角 + 方块」，不描光影、不做渐变</span>
+    <span>·</span>
+    <span>16–20px 用简化版，24px 起用完整版</span>
+    <span>·</span>
+    <span>应用图标：墨底反白，圆角由系统裁切</span>
+  </div>
+</div>
+</body></html>
