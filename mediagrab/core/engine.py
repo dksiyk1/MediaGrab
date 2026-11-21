@@ -50,6 +50,7 @@ class ParseEngine:
         """适配器注册表。新增平台只改这里。"""
         from .adapters.bilibili_adapter import BilibiliAdapter
         from .adapters.douyin_adapter import DouyinAdapter
+        from .adapters.weibo_adapter import WeiboAdapter
         from .adapters.xhs_adapter import XiaohongshuAdapter
 
         self._adapters = [
@@ -57,6 +58,8 @@ class ParseEngine:
             BilibiliAdapter(self.ctx),
             XiaohongshuAdapter(self.ctx),
             DouyinAdapter(self.ctx),
+            # 微博放在 yt-dlp 前面：图文只有它能解，视频它会自己转给 yt-dlp
+            WeiboAdapter(self.ctx),
             # yt-dlp 兜底，覆盖 1000+ 站点
             YtdlpAdapter(self.ctx),
         ]

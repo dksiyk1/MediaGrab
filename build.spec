@@ -51,6 +51,7 @@ hiddenimports += [
     "mediagrab.core.adapters.bilibili_adapter",
     "mediagrab.core.adapters.xhs_adapter",
     "mediagrab.core.adapters.douyin_adapter",
+    "mediagrab.core.adapters.weibo_adapter",
     "mediagrab.core.adapters.ytdlp_adapter",
 ]
 
